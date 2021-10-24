@@ -17,7 +17,7 @@ router.get('/detail/:id', async function(req, res, next) {
 });
 
 router.post('/', async function(req, res, next){
-    const new_class = {className: req.body.className};
+    const new_class = {ClassName: req.body.ClassName};
     await db.add(new_class);
     const allDB = await db.all();
     res.json(allDB);

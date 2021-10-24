@@ -6,12 +6,12 @@ module.exports = {
     },
 
     async one(ID){
-        const item = await db('Classes').where('id', ID);
+        const item = await db('Classes').where('ID', ID);
         return item.length>0 ? item[0] : null;
     },
 
     async isExisted(className){
-        const item = await db('Classes').where('className', className);
+        const item = await db('Classes').where(db.raw('LOWER("ClassName") = ?', className.toLowerCase()));
         return item.length>0 ? true : false;
     },
 

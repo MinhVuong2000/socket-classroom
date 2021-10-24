@@ -27,11 +27,13 @@ const connectionString = "postgres://jaklhzcjqgyfui:88a2c4b2cdff1fed8688548830a3
 
 const knex = require('knex')({
     client: 'pg',
-    connection: connectionString,
-    ssl: {
-        rejectUnauthorized: false 
+    connection: {
+        connectionString,
+        ssl: {
+            rejectUnauthorized: false 
+        },
     },
-    // searchPath: ['knex', 'public'],
+    searchPath: ['knex', 'public'],
   });
 
 module.exports = knex;
