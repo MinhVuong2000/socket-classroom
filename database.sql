@@ -12,7 +12,7 @@
  Target Server Version : 140000
  File Encoding         : 65001
 
- Date: 17/11/2021 08:30:55
+ Date: 17/11/2021 20:57:51
 */
 
 
@@ -57,6 +57,14 @@ ALTER TABLE "public"."Class_User" OWNER TO "postgres";
 -- Records of Class_User
 -- ----------------------------
 BEGIN;
+INSERT INTO "public"."Class_User" VALUES (12, 2, 't', NULL);
+INSERT INTO "public"."Class_User" VALUES (12, 3, 'f', NULL);
+INSERT INTO "public"."Class_User" VALUES (12, 4, 'f', NULL);
+INSERT INTO "public"."Class_User" VALUES (13, 3, 't', NULL);
+INSERT INTO "public"."Class_User" VALUES (13, 2, 'f', NULL);
+INSERT INTO "public"."Class_User" VALUES (14, 4, 't', NULL);
+INSERT INTO "public"."Class_User" VALUES (14, 3, 'f', NULL);
+INSERT INTO "public"."Class_User" VALUES (14, 6, 'f', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -82,6 +90,9 @@ ALTER TABLE "public"."Classes" OWNER TO "postgres";
 -- Records of Classes
 -- ----------------------------
 BEGIN;
+INSERT INTO "public"."Classes" OVERRIDING SYSTEM VALUE VALUES (12, 'PTUDW', 'Môn học cơ bản về back end', 2, NULL);
+INSERT INTO "public"."Classes" OVERRIDING SYSTEM VALUE VALUES (13, 'PTUDWNC', 'Học cách phát triển front end', 3, NULL);
+INSERT INTO "public"."Classes" OVERRIDING SYSTEM VALUE VALUES (14, 'PTUDDD', 'Xây dựng ứng dụng cho thiết bị di động', 4, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -110,6 +121,10 @@ ALTER TABLE "public"."Users" OWNER TO "postgres";
 -- Records of Users
 -- ----------------------------
 BEGIN;
+INSERT INTO "public"."Users" OVERRIDING SYSTEM VALUE VALUES (2, 'Nguyễn Văn A', 'a_nguyenvan', '123', '123', NULL, NULL, NULL);
+INSERT INTO "public"."Users" OVERRIDING SYSTEM VALUE VALUES (3, 'Võ Xuân Đức Thắng', 'thang_123', '123', '124', NULL, NULL, NULL);
+INSERT INTO "public"."Users" OVERRIDING SYSTEM VALUE VALUES (4, 'Nguyễn Thị Minh Vượng', 'vuong_321', '123', '321', NULL, NULL, NULL);
+INSERT INTO "public"."Users" OVERRIDING SYSTEM VALUE VALUES (6, 'Lê Thị Tuyết Trinh', 'trinh_312', '123', '312', NULL, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -117,14 +132,14 @@ COMMIT;
 -- ----------------------------
 ALTER SEQUENCE "public"."Classes_id_seq"
 OWNED BY "public"."Classes"."id";
-SELECT setval('"public"."Classes_id_seq"', 11, true);
+SELECT setval('"public"."Classes_id_seq"', 15, true);
 
 -- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
 ALTER SEQUENCE "public"."Users_id_seq"
 OWNED BY "public"."Users"."id";
-SELECT setval('"public"."Users_id_seq"', 2, false);
+SELECT setval('"public"."Users_id_seq"', 7, true);
 
 -- ----------------------------
 -- Checks structure for table Class_User

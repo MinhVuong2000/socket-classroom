@@ -11,7 +11,7 @@ module.exports = {
     },
 
     async isExisted(className){
-        const item = await db('Classes').where(db.raw('LOWER("ClassName") = ?', className.toLowerCase()));
+        const item = await db('Classes').where(db.raw('LOWER("class_name") = ?', className.toLowerCase()));
         return item.length>0 ? true : false;
     },
 
