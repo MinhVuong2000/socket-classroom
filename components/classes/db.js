@@ -6,7 +6,7 @@ module.exports = {
     },
 
     async one(ID){
-        const item = await db('Classes').where('ID', ID);
+        const item = await db('Classes').where('id', ID);
         return item.length>0 ? item[0] : null;
     },
 
