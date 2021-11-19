@@ -2,11 +2,11 @@ const db = require('../../../utils/connectDB')
 
 module.exports = {
     all(){
-        return db('Users');
+        return db('users');
     },
 
     async one(ID, is_detail=false){
-        let items = await db('Users').where('id', ID);
+        let items = await db('users').where('id', ID);
         if (items.length==0)
             return null;
         if (!is_detail){

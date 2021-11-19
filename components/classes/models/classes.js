@@ -4,7 +4,7 @@ const class_user_db = require('./class_user')
 
 module.exports = {
     async all(){
-        let items = await db('Classes');
+        let items = await db('classes');
         for (let i = 0; i < items.length; i++){
             items[i].id_admin = await user_db.one(items[i].id_admin)
         }
@@ -12,7 +12,7 @@ module.exports = {
     },
 
     async one(ID){
-        let item = await db('Classes').where('id', ID);
+        let item = await db('classes').where('id', ID);
         if (item.length==0){
             return null;
         }
@@ -29,6 +29,6 @@ module.exports = {
     },
 
     add(new_classroom){
-        return db('Classes').insert(new_classroom);
+        return db('classes').insert(new_classroom);
     },
 }
