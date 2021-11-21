@@ -12,14 +12,14 @@ CREATE TABLE class_user (
 -- Records of Class_User
 -- ----------------------------
 BEGIN;
-INSERT INTO class_user VALUES (12, 2, 't', NULL);
-INSERT INTO class_user VALUES (12, 3, 'f', NULL);
-INSERT INTO class_user VALUES (12, 4, 'f', NULL);
-INSERT INTO class_user VALUES (13, 3, 't', NULL);
-INSERT INTO class_user VALUES (13, 2, 'f', NULL);
-INSERT INTO class_user VALUES (14, 4, 't', NULL);
-INSERT INTO class_user VALUES (14, 3, 'f', NULL);
-INSERT INTO class_user VALUES (14, 6, 'f', NULL);
+INSERT INTO class_user VALUES (1, 1, 't', NULL);
+INSERT INTO class_user VALUES (1, 2, 'f', NULL);
+INSERT INTO class_user VALUES (1, 3, 'f', NULL);
+INSERT INTO class_user VALUES (2, 2, 't', NULL);
+INSERT INTO class_user VALUES (2, 1, 'f', NULL);
+INSERT INTO class_user VALUES (3, 3, 't', NULL);
+INSERT INTO class_user VALUES (3, 2, 'f', NULL);
+INSERT INTO class_user VALUES (3, 4, 'f', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -44,9 +44,9 @@ START 6
 -- Records of Classes
 -- ----------------------------
 BEGIN;
-INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (12, 'PTUDW', 'Môn học cơ bản về back end', 2, NULL);
-INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (13, 'PTUDWNC', 'Học cách phát triển front end', 3, NULL);
-INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (14, 'PTUDDD', 'Xây dựng ứng dụng cho thiết bị di động', 4, NULL);
+INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (1, 'PTUDW', 'Môn học cơ bản về back end', 2, NULL);
+INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (2, 'PTUDWNC', 'Học cách phát triển front end', 3, NULL);
+INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (3, 'PTUDDD', 'Xây dựng ứng dụng cho thiết bị di động', 4, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -64,9 +64,10 @@ START 1
   "username" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "password" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "id_uni" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "adress" varchar(255),
+  "address" varchar(255),
   "email" varchar(255),
-  "phone" int4
+  "phone" varchar(50),
+	"otp" int4
 )
 ;
 
@@ -74,10 +75,10 @@ START 1
 -- Records of Users
 -- ----------------------------
 BEGIN;
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (2, 'Nguyễn Văn A', 'a_nguyenvan', '123', '123', NULL, NULL, NULL);
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (3, 'Võ Xuân Đức Thắng', 'thang_123', '123', '124', NULL, NULL, NULL);
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (4, 'Nguyễn Thị Minh Vượng', 'vuong_321', '123', '321', NULL, NULL, NULL);
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (6, 'Lê Thị Tuyết Trinh', 'trinh_312', '123', '312', NULL, NULL, NULL);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (1, 'Nguyễn Văn A', 'a_nguyenvan', '123', '123', NULL, NULL, NULL);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (2, 'Võ Xuân Đức Thắng', 'thang_123', '123', '124', NULL, NULL, NULL);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (3, 'Nguyễn Thị Minh Vượng', 'vuong_321', '123', '321', NULL, NULL, NULL);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (4, 'Lê Thị Tuyết Trinh', 'trinh_312', '123', '312', NULL, NULL, NULL);
 COMMIT;
 
 
@@ -122,3 +123,5 @@ ALTER TABLE class_user ADD CONSTRAINT "ID_USER_CLASSUSERUSER" FOREIGN KEY ("id_u
 -- Foreign Keys structure for table Classes
 -- ----------------------------
 ALTER TABLE classes ADD CONSTRAINT "ADMIN_CLASSUSER" FOREIGN KEY ("id_admin") REFERENCES users ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+select * from users
