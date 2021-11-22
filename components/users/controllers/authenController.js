@@ -4,7 +4,11 @@ const class_user_db = require('../models/class_user.model')
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const nodemailer = require('nodemailer');
-const { findUserByUsername } = require('../models/user.model');
+const jwtHelper = require("../../../utils/jwt.helper");
+
+const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+
 
 exports.passport_google = async (accessToken, refreshToken, profile, done) => {
     console.log(profile)
@@ -53,6 +57,7 @@ exports.register = async function(req, res) {
         phone: req.body.phone,
         otp: -1
     }
+
     let flag = await user_db.addNewUser(user);
 
     if (flag){
@@ -60,21 +65,21 @@ exports.register = async function(req, res) {
             {
                 service: 'gmail',
                 auth: {
-                  user: 'classroom.webnangcao@gmail.com',
-                  pass: 'thangtrinhvuong'
+                    user: 'classroom.webnangcao@gmail.com',
+                    pass: 'thangtrinhvuong'
                 },
         });
         
         var mailOptions={
             from: "classroom.webnangcao@gmail.com",
             to: req.body.email,
-           subject: "Notice create account successfully",
-           html: `<p>Dear you,${req.body.email}</p>`+
-           "<h3>This is a email to notice create account successfully </h3>"  + 
-           "<p>Thank you</p>",
+            subject: "Notice create account successfully",
+            html: `<p>Dear you,${req.body.email}</p>`+
+            "<h3>This is a email to notice create account successfully </h3>"  + 
+            "<p>Thank you</p>",
         };
          
-         transporter.sendMail(mailOptions, (error, info) => {
+        transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 return console.log(error);
             }
@@ -125,71 +130,28 @@ exports.signin = async (req, res) => {
     if (row_user != null) {
         return checkPassword(row_user, req, res);
     }
-     
-    return res.render('account/login', {
-        err_message: 'Username không đúng',
-    })
+    return res.json("Username không tồn tại!");
 }
 
-var email;
-
-exports.signout = (req, res) => {
-    // TO DO: change destroy session by JWT
-    
-    res.redirect('/');
-}
-
-function checkPassword(rows, req, res) {
-  const ret = bcrypt.compareSync(req.body.password, rows.Password);
-  
+async function checkPassword(rows, req, res) {
+  const ret = bcrypt.compareSync(req.body.password, rows.password);
   if (ret===false){
-    /*return res.render('account/login', {
-        err_message: 'Password không đúng',
-    })*/
-    return false;
+    return res.json("Password không đúng");
   }
   else{
-    handle_login_successfully(rows, req, res, false);
+    return handle_login_successfully(rows, req, res, false);
   }
-  //return authInfor;
 }
 
 exports.login_successfully = handle_login_successfully;
 
-function handle_login_successfully(rows, req, res, loggedBySocial) {
-    // dang nhap thanh cong thi luu thong tin vao trong session 
-    let adm = null, sub = null, wrt = null, edt = null, Premium = 1, nickname = null;
-    console.log(rows);
-    
-    //This is the session for login user
-    //TO DO: replace this by JWT
-
-    /*req.session.user = {
-        id: rows.ID,
-        name: rows.Name,
-        username: rows.UserName,
-        address: rows.Address,
-        birthday: moment(rows.BirthDay).format('DD/MM/YYYY'),
-        email: rows.Email,
-        role: role,
-        nickname: nickname,
-        expTime: exp,
-        subPremium: subPre,
-        logged: true,
-        admin: adm,
-        subcriber: sub,
-        writer: wrt,
-        editor: edt,
-        premium: Premium,
-        loggedBySocial: loggedBySocial,
-    };
-    //res.locals.session = req.session.user;
-    //console.log(req.locals.session);
-    console.log(req.session.user);
-    // TODO: render cac file sao cho phu hop voi tung role
-    let url = req.session.retURL || "/" +role;
-    if (role=='admin')
-        url = req.session.retURL || "/" +role + '/dashboard';
-    return res.redirect(url )*/
-    return res.redirect('/')
+async function handle_login_successfully(rows, req, res, loggedBySocial) {
+    // dang nhap thanh cong thi luu thong tin bang JWT
+    try{
+        //This is JWT
+        const accessToken = await jwtHelper.generateToken(rows, accessTokenSecret, accessTokenLife, loggedBySocial);
+        return res.status(200).json({'access_token':accessToken});
+    } catch (error) {
+        return res.status(500).json(error);
+    }
 }

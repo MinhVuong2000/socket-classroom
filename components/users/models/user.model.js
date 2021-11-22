@@ -73,7 +73,7 @@ module.exports = {
         return items[0];
     },
 
-    async findUserByUsername(username, is_detail=false){
+    async findUserByUsername(username){
         let items = await db('users').where('username', username);
         if (items.length==0)
             return null;

@@ -1,4 +1,4 @@
-const authentication = require('../controllers/authenController.js');
+const authentication = require('../components/users/controllers/authenController.js');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
@@ -18,9 +18,6 @@ app.get('/auth/google/callback',
         authentication.login_successfully(role, rows, req, res,true);
     }
 );
-app.get('/register',(req, res) => {
-    //res.render('account/register');
-})
 
 app.get('/is-available',authentication.is_available);
 app.get('/is-available-email',authentication.is_available_email);
@@ -36,5 +33,3 @@ app.get('/login', authorMdw.checkAlreadyLoggedIn, (req, res) => {
 });
 
 app.post('/login', authentication.signin);
-
-app.get('/signout', authentication.signout);

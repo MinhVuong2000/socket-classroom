@@ -35,13 +35,9 @@ router.get('/auth/google/callback',
     failureRedirect: '/failed',
     session: false }),async (req, res) => {
         const rows = await req.user;
-        let role = "subcriber";
-        authentication.login_successfully(role, rows, req, res,true);
+        authentication.login_successfully(rows, req, res,true);
     }
 );
-router.get('/register',(req, res) => {
-    //res.render('account/register');
-})
 
 router.get('/is-available',authentication.is_available);
 router.get('/is-available-email',authentication.is_available_email);
@@ -50,15 +46,6 @@ router.get('/check-exist-email',authentication.is_exist_email);
 
 router.post('/register',authentication.register);
 
-router.get('/login', (req, res) => {
-    after_register = req.query.register || null;
-    res.render('account/login',{ 
-        after_register: after_register
-    })
-});
-
 router.post('/login', authentication.signin);
-
-router.get('/signout', authentication.signout);
 
 module.exports = router;
