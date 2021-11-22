@@ -58,11 +58,11 @@ CREATE TABLE users (
 INCREMENT 1
 MINVALUE  1
 MAXVALUE 2147483647
-START 1
+START 5
 ),
   "full_name" varchar(255),
   "username" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "password" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+  "password" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "id_uni" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "address" varchar(255),
   "email" varchar(255),
