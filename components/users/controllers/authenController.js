@@ -38,47 +38,52 @@ exports.passport_google = async (accessToken, refreshToken, profile, done) => {
 
 exports.register = async function(req, res) {
     //Get infor from form at FE (username/password/email/phone/mssv/fullname/address)
+    
+    console.log(req.body);
+    
     const hash = bcrypt.hashSync(req.body.raw_password, 10);
 
     const user = {
         username: req.body.username,
         password: hash,
-        fullname: req.body.fullname,
-        mssv: req.body.mssv,
+        full_name: req.body.fullname,
+        id_uni: req.body.mssv,
         email: req.body.email,
         address: req.body.address,
         phone: req.body.phone,
         otp: -1
     }
-    await user_db.addNewUser(user);
+    let flag = await user_db.addNewUser(user);
 
-    let transporter = nodemailer.createTransport(
-        {
-            service: 'gmail',
-            auth: {
-              user: 'classroom.webnangcao@gmail.com',
-              pass: 'thangtrinhvuong'
-            },
-    });
-    
-    var mailOptions={
-        from: "classroom.webnangcao@gmail.com",
-        to: email,
-       subject: "Notice create account classroom succesfully",
-       html: `<p>Dear you,${email}</p>`+
-       "<h3>This email to notice that you create account for classroom successfully </h3>"  + 
-       "<p>Thank you</p>",
-    };
-     
-     transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message sent: %s', info.messageId);   
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-  
-        res.redirect(`/`);
-    });
+    if (flag){
+        let transporter = nodemailer.createTransport(
+            {
+                service: 'gmail',
+                auth: {
+                  user: 'classroom.webnangcao@gmail.com',
+                  pass: 'thangtrinhvuong'
+                },
+        });
+        
+        var mailOptions={
+            from: "classroom.webnangcao@gmail.com",
+            to: req.body.email,
+           subject: "Notice create account successfully",
+           html: `<p>Dear you,${req.body.email}</p>`+
+           "<h3>This is a email to notice create account successfully </h3>"  + 
+           "<p>Thank you</p>",
+        };
+         
+         transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);   
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      
+            res.redirect(`/`);
+        });
+    }
 }
 
 exports.is_available = async (req, res)=>{
@@ -91,7 +96,15 @@ exports.is_available = async (req, res)=>{
 
 exports.is_available_email = async (req, res)=>{
     const email = req.query.email;
-    const rowsUser = await user_db.findUserByEmail(username);
+    const rowsUser = await user_db.findUserByEmail(email);
+    if (rowsUser === null)  
+        return res.json(true);
+    return res.json(false);
+}
+
+exports.is_available_mssv = async (req, res)=>{
+    const mssv = req.query.mssv;
+    const rowsUser = await user_db.checkAvailableMSSV(mssv);
     if (rowsUser === null)  
         return res.json(true);
     return res.json(false);
@@ -103,7 +116,7 @@ exports.is_exist_email = async (req, res)=>{
     const rowUsers = await reader.findUserByEmail(email);
     if (rowUsers === null) 
         return res.json(false);
-    return res.json(rowsReader.UserName);
+    return res.json(rowUsers.UserName);
     
 }
 

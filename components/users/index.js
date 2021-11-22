@@ -45,6 +45,7 @@ router.get('/register',(req, res) => {
 
 router.get('/is-available',authentication.is_available);
 router.get('/is-available-email',authentication.is_available_email);
+router.get('/is-available-mssv',authentication.is_available_mssv);
 router.get('/check-exist-email',authentication.is_exist_email);
 
 router.post('/register',authentication.register);

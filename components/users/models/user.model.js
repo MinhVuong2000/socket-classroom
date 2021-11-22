@@ -13,7 +13,7 @@ module.exports = {
             let userinfor = {};
             userinfor.username = items[0].username;
             userinfor.password = items[0].password;
-            userinfor.fullname = items[0].fullname;
+            userinfor.fullname = items[0].full_name;
             userinfor.email = items[0].email;
             userinfor.phone = items[0].phone;
             userinfor.address = items[0].address;
@@ -47,7 +47,7 @@ module.exports = {
             let userinfor = {};
             userinfor.username = items[0].username;
             userinfor.password = items[0].password;
-            userinfor.fullname = items[0].fullname;
+            userinfor.fullname = items[0].full_name;
             userinfor.email = items[0].email;
             userinfor.phone = items[0].phone;
             userinfor.address = items[0].address;
@@ -87,6 +87,12 @@ module.exports = {
         return items[0];
     },
 
+    async checkAvailableMSSV(mssv){
+        let items = await db('users').where('id_uni', mssv);
+        if (items.length==0)
+            return null;
+        return items[0];
+    },
     async addNewUser(new_user){
         return db('users').insert(new_user);
     }
