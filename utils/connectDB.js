@@ -23,7 +23,7 @@ const knex_local= require('knex')({
     }
 });
 
-const connectionString = "postgres://jaklhzcjqgyfui:88a2c4b2cdff1fed8688548830a357f7f063f90036a9514d70e04a5bc6ecf19c@ec2-54-159-176-167.compute-1.amazonaws.com:5432/d6b5uiqnu3rvnh"
+const connectionString = "postgres://qqxcjgirfwuzsq:3b431b2fcf04b6bf1b1c3fdb1a185e7a79c445e5c33529b9fd9a2863d230e4cb@ec2-35-153-4-187.compute-1.amazonaws.com:5432/d49k2i7orpvlep"
 
 const knex = require('knex')({
     client: 'pg',
