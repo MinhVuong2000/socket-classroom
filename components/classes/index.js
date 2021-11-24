@@ -6,15 +6,28 @@ const BASEURL = 'http://localhost:3000/classes/inviteclass/'
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-    const allData = await classed_db.all();
-    res.json(allData);
+    if(req.jwtDecoded){
+        //console.log(req.jwtDecoded.data.id);
+        const allData = await classed_db.all(req.jwtDecoded.data.id);
+        res.json(allData);
+    }
+    else{
+        return res.json(null);
+    }
 });
 
 /* GET a id. */
 router.get('/detail/:id', async function(req, res, next) {
-    const id = parseInt(req.params.id);
-    const item = await classed_db.one(id);
-    res.json(item);
+    if(req.jwtDecoded){
+        const idclass = parseInt(req.params.id);
+        console.log(req.jwtDecoded.data.id);
+        const item = await classed_db.one(idclass, req.jwtDecoded.data.id);
+        res.json(item);
+    }
+    else{
+        return res.json(null);
+    }
+    
 });
 
 router.get('/inviteclass/:link', async function(req, res, next) {

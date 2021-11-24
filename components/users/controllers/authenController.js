@@ -154,7 +154,9 @@ async function handle_login_successfully(rows, req, res, loggedBySocial) {
     try{
         //This is JWT
         const accessToken = await jwtHelper.generateToken(rows, accessTokenSecret, accessTokenLife, loggedBySocial);
-        return res.status(200).json({'access_token':accessToken});
+        let data = {};
+        data.access_token = accessToken;
+        return res.json(data);
     } catch (error) {
         return res.status(500).json(error);
     }

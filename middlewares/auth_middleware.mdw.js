@@ -11,15 +11,12 @@ let isAuth = async (req, res, next) => {
             req.jwtDecoded = decoded;
             next();
         } catch (error) {
-            return res.status(401).json({
-                message: 'Unauthorized.',
-            });
+            next();
         }
     } else {
-        return res.status(403).send({
-            message: 'No token provided.',
-        });
-    }
+        next();
+    };
+    
 }
 
 module.exports = {
