@@ -45,7 +45,7 @@ exports.register = async function(req, res) {
     
     console.log(req.body);
     
-    const hash = bcrypt.hashSync(req.body.raw_password, 10);
+    const hash = bcrypt.hashSync(req.body.password, 10);
 
     const user = {
         username: req.body.username,
@@ -59,9 +59,9 @@ exports.register = async function(req, res) {
     }
 
     let flag = await user_db.addNewUser(user);
-
+    console.log("add user", flag);
     if (flag){
-        let transporter = nodemailer.createTransport(
+        /*let transporter = nodemailer.createTransport(
             {
                 service: 'gmail',
                 auth: {
@@ -85,18 +85,32 @@ exports.register = async function(req, res) {
             }
             console.log('Message sent: %s', info.messageId);   
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-      
-            res.redirect(`/`);
-        });
+        });*/
+        return res.json(true);
     }
+    return res.json(false);
 }
 
 exports.is_available = async (req, res)=>{
-    const username = req.query.username;
-    const rowsUser = await user_db.findUserByUsername(username);
-    if (rowsUser === null)  
-        return res.json(true);
-    return res.json(false);
+    const username = req.body.username;
+    const email = req.body.email;
+    const mssv = req.body.mssv;
+    if(username == '')
+        return res.json ({message: 'Username không được trống'});
+    if(email == '')
+        return res.json ({message: 'Email không được trống'});
+    if(mssv == '')
+        return res.json ({message: 'MSSV không được trống'});
+    const rowsUsername = await user_db.findUserByUsername(username);
+    const rowsEmail = await user_db.findUserByEmail(email);
+    const rowsMssv = await user_db.findUserByMSSV(mssv, true);
+    if (rowsUsername !== null)  
+        return res.json({message: 'Invalid Username!'});
+    if (rowsEmail !== null)  
+        return res.json({message: 'Invalid Email!'});
+    if (rowsMssv !== null)  
+        return res.json({message: 'Invalid MSSV!'});
+    return res.json(true);
 }
 
 exports.is_available_email = async (req, res)=>{

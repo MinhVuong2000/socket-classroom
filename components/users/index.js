@@ -38,7 +38,7 @@ router.get('/auth/google/callback',
     }
 );
 
-router.get('/is-available',authentication.is_available);
+router.post('/is-available',authentication.is_available);
 router.get('/is-available-email',authentication.is_available_email);
 router.get('/is-available-mssv',authentication.is_available_mssv);
 router.get('/check-exist-email',authentication.is_exist_email);
