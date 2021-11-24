@@ -126,19 +126,23 @@ exports.is_exist_email = async (req, res)=>{
 }
 
 exports.signin = async (req, res) => {
+    console.log("signin:", req.body)
     const row_user = await user_db.findUserByUsername(req.body.username);
     if (row_user != null) {
         return checkPassword(row_user, req, res);
     }
-    return res.json("Username không tồn tại!");
+    console.log("Username không tồn tại!")
+    return res.json({'access_token':'error_username'});
 }
 
 async function checkPassword(rows, req, res) {
   const ret = bcrypt.compareSync(req.body.password, rows.password);
   if (ret===false){
-    return res.json("Password không đúng");
+    console.log("Password không đúng")
+    return res.json({'access_token':'error_password'});
   }
   else{
+    console.log("lgin thanh cong")
     return handle_login_successfully(rows, req, res, false);
   }
 }

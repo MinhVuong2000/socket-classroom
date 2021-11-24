@@ -17,11 +17,10 @@ passport.use(new GoogleStrategy({
     authentication.passport_google
 ));
 
-/* GET a id. */
-router.get('/profile/:id', async function(req, res, next) {
-    const id = parseInt(req.params.id);
-    const item = await user_db.findUserByID(id, false);
-    res.json(item);
+
+router.get('/profile', async function(req, res, next) {
+    console.log(req.jwtDecoded.data);
+    return res.json(req.jwtDecoded.data);
 });
 
 
