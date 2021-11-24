@@ -13,4 +13,23 @@ module.exports = {
         }
         return items;
     },
+    async addUserToClass(classID, userid){
+        console.log("add useer");
+        await db('class_user').insert({
+            id_class: classID,
+            id_user: userid,
+            is_teacher: false
+        })
+    },
+    async checkIsExistUserOnClass(classid, userid){
+        let item = await db('class_user').where({
+            id_class: classid,
+            id_user: userid
+        })
+        console.log('Is exit on class', item);
+        if(item.length==0){
+            return false;
+        }
+        return true;
+    }
 }

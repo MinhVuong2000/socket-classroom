@@ -39,6 +39,7 @@ module.exports = {
         item.admin_info = await user_db.one(item.id_admin);
         item.list_teacher = await class_user_db.roleByClass(idclass,true)
         item.list_student = await class_user_db.roleByClass(idclass,false);
+        item.isTeacher = class_user_item[0].is_teacher;
         console.log(item);
         return item;
     },
@@ -55,6 +56,18 @@ module.exports = {
         item.list_teacher = await class_user_db.roleByClass(ID,true)
         item.list_student = await class_user_db.roleByClass(ID,false)
         return item;
+    },
+    async findIDClassByLink(link){
+        console.log("inside findIDClassByLink");
+        let item = await db('classes').where('invitation_link', link);
+        // console.log("typeof item:" + typeof item);
+        // console.log("item 0:" + item[0]);
+        console.log("found ID: " + item[0].id);
+        if (item.length==0){
+            return null;
+        }
+        
+        return item[0].id;
     },
 
     async isExisted(className){

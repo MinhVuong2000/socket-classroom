@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const classed_db = require('./models/classes');
-const BASEURL = 'http://localhost:3000/classes/inviteclass/'
+const class_user_db = require('./models/class_user');
+const BASEURL = 'http://localhost:3001/classes/inviteclass/'
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
@@ -31,16 +32,33 @@ router.get('/detail/:id', async function(req, res, next) {
 });
 
 router.get('/inviteclass/:link', async function(req, res, next) {
-    const linkclass = encodeURI(req.params.link);
-    console.log(linkclass);
-    const item = await classed_db.findClassByLink(linkclass);
-    res.json(item);
+    if(req.jwtDecoded){
+        const linkclass = await encodeURI(req.params.link);
+        console.log("link class",linkclass);
+        console.log("idusser: ",req.jwtDecoded.data.id);
+
+        const itemid = await classed_db.findIDClassByLink(linkclass);
+        console.log("item:" + itemid);
+        if(itemid == null){
+            return res.json(null);
+        }
+        let flag = await class_user_db.checkIsExistUserOnClass(itemid, req.jwtDecoded.data.id)
+        if(!flag){
+            await class_user_db.addUserToClass(itemid, req.jwtDecoded.data.id);
+        }
+        const items = await classed_db.one(itemid, req.jwtDecoded.data.id);
+        res.json(items);
+    }
+    else{
+        return res.json(null);
+    }
 });
 
-router.get('/sendinvite/:classlink', async function(req, res, next){
+router.post('/sendinvite/:classlink', async function(req, res, next){
     //TODO: get email from form
     //let email = req.body.email;
-    let email = "trinhlehcmus.172@gmail.com"
+    let email = req.body.email;
+    console.log(email);
     let classlink = encodeURI(req.params.classlink);
     classlink = BASEURL + classlink;
     console.log(classlink);
@@ -65,24 +83,22 @@ router.get('/sendinvite/:classlink', async function(req, res, next){
      
      transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            return console.log(error);
+            return res.json(false);
         }
         console.log('Message sent: %s', info.messageId);   
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   
-        res.redirect(`/`);
     });
+    return res.json(true);
 }),
 
 router.post('/', async function(req, res, next){
-    const link = req.body.class_name;
     //const randomstr = randomstring(8);
     //link = link + randomstr;
-    console.log(link);
     let enlink = encodeURI(link);
     const new_class = {
         class_name: req.body.class_name,
-        description: 'req.body.description',
+        description: req.body.description,
         id_admin: 2,
         invitation_link: enlink
     };
