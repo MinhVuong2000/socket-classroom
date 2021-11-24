@@ -95,16 +95,26 @@ router.post('/sendinvite/:classlink', async function(req, res, next){
 router.post('/', async function(req, res, next){
     //const randomstr = randomstring(8);
     //link = link + randomstr;
-    let enlink = encodeURI(link);
-    const new_class = {
-        class_name: req.body.class_name,
-        description: req.body.description,
-        id_admin: 2,
-        invitation_link: enlink
-    };
-    await classed_db.add(new_class);
-    const allclassed_db = await classed_db.all();
-    res.json(allclassed_db);
+    console.log(req.jwtDecoded);
+    if(req.jwtDecoded){
+        let enlink = encodeURI(req.body.class_name);
+        console.log("vao add class");
+        console.log("encode", enlink)
+        const new_class = {
+            class_name: req.body.class_name,
+            description: req.body.description,
+            id_admin: req.jwtDecoded.data.id,
+            invitation_link: enlink
+        };
+        console.log("new class", new_class);
+        await classed_db.add(new_class);
+        const allclassed_db = await classed_db.all(req.jwtDecoded.data.id);
+        res.json(allclassed_db);
+    }
+    else{
+        res.json(false);
+    }
+    
 }),
 
 router.get('/isExistedClassName', async function(req, res, next){

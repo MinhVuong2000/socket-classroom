@@ -75,7 +75,19 @@ module.exports = {
         return item.length>0 ? true : false;
     },
 
-    add(new_classroom){
-        return db('classes').insert(new_classroom);
+    async add(new_classroom){
+        await db('classes').insert(new_classroom);
+        let items = await db('classes').where({
+            class_name: new_classroom.class_name
+        })
+        if(items.length == 0){
+            return null;
+        }
+        await db('class_user').insert({
+            id_class: items[0].id,
+            id_user: new_classroom.id_admin,
+            is_teacher: true
+        });
+        return true;
     },
 }
