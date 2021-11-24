@@ -3,7 +3,7 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const classed_db = require('./models/classes');
 const class_user_db = require('./models/class_user');
-const BASEURL = 'http://localhost:3001/classes/inviteclass/'
+const BASEURL = 'https://classroom-midterm-fe.herokuapp.com/classes/inviteclass/'
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
