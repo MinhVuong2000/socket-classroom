@@ -63,7 +63,7 @@ START 5
   "full_name" varchar(255),
   "username" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "password" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
-  "id_uni" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+  "id_uni" varchar(50) COLLATE "pg_catalog"."default",
   "address" varchar(255),
   "email" varchar(255),
   "phone" varchar(50),
