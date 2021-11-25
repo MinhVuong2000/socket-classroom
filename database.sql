@@ -75,10 +75,10 @@ START 5
 -- Records of Users
 -- ----------------------------
 BEGIN;
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (1, 'Nguyễn Văn A', 'a_nguyenvan', '123', '123', NULL, NULL, NULL);
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (2, 'Võ Xuân Đức Thắng', 'thang_123', '123', '124', NULL, NULL, NULL);
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (3, 'Nguyễn Thị Minh Vượng', 'vuong_321', '123', '321', NULL, NULL, NULL);
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (4, 'Lê Thị Tuyết Trinh', 'trinh_312', '123', '312', NULL, NULL, NULL);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (1, 'Nguyễn Văn A', 'a_nguyenvan', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '123', NULL, NULL, NULL, -1);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (2, 'Võ Xuân Đức Thắng', 'thang_123', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '124', NULL, NULL, NULL, -1);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (3, 'Nguyễn Thị Minh Vượng', 'vuong_321', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '321', NULL, NULL, NULL, -1);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (4, 'Lê Thị Tuyết Trinh', 'trinh_312', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '312', NULL, NULL, NULL, -1);
 COMMIT;
 
 
@@ -105,7 +105,6 @@ ALTER TABLE classes ADD CONSTRAINT "Classes_pkey" PRIMARY KEY ("id");
 -- ----------------------------
 -- Uniques structure for table Users
 -- ----------------------------
-ALTER TABLE users ADD CONSTRAINT "ID_UNI" UNIQUE ("id_uni");
 ALTER TABLE users ADD CONSTRAINT "USERNAME" UNIQUE ("username");
 
 -- ----------------------------

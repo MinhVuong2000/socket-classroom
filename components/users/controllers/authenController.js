@@ -12,14 +12,23 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
 exports.passport_google = async (accessToken, refreshToken, profile, done) => {
     console.log(profile)
+    const all_user = await user_db.all();
+    let min = 0;
+    all_user.forEach(character => {
+        if (character.id < min) {
+            min = character.id;
+        }
+    });
     //get the user data from google 
     const newUser = {
-        name: profile.displayName,
+        full_name: profile.displayName,
         email: profile.emails[0].value,
         username: profile.emails[0].value,
         password: bcrypt.hashSync(profile.id,10),
-        otp:-2,
+        id_uni: min-1,
+        otp:-1,
     }
+    console.log(newUser)
     try {
         //find the user in our database 
         let user = await user_db.findUserByEmail(newUser.email);
@@ -33,10 +42,10 @@ exports.passport_google = async (accessToken, refreshToken, profile, done) => {
             console.log("Chua ton tai google account")
             let userID = await user_db.addNewUser(newUser);
             user = user_db.findUserByID(userID);
-            done(null, user)
+            done(null, user);
         }
     } catch (err) {
-        console.error(err)
+        console.error("Error login", err)
     }
 }
 
@@ -147,6 +156,19 @@ exports.signin = async (req, res) => {
     }
     console.log("Username không tồn tại!")
     return res.json({'access_token':'error_username'});
+}
+
+exports.google_signin = async (req, res) => {
+    console.log("signin:", req.body);
+    let row_user = await user_db.findUserByUsername(req.body.username);
+    console.log("row_user:",row_user);
+    if (row_user == null) {
+        const new_user = req.body;
+        new_user.password = bcrypt.hashSync(req.body.password, 10);
+        await user_db.addNewUser(new_user);
+    }
+    row_user = await user_db.findUserByUsername(req.body.username);
+    return handle_login_successfully(row_user, req, res, true);
 }
 
 async function checkPassword(rows, req, res) {

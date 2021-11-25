@@ -46,5 +46,6 @@ router.get('/check-exist-email',authentication.is_exist_email);
 router.post('/register',authentication.register);
 
 router.post('/login', authentication.signin);
+router.post('/google-login', authentication.google_signin);
 
 module.exports = router;
