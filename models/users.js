@@ -1,4 +1,4 @@
-const db = require('../../../utils/connectDB')
+const db = require('../utils/connectDB')
 
 module.exports = {
     all(){

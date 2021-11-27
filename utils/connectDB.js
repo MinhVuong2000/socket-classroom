@@ -18,8 +18,8 @@ const knex_local= require('knex')({
         host : 'localhost',
         port : 5432,
         user : 'postgres',
-        password : 'root',
-        database : 'classrooms'
+        password : 'postgres',
+        database : 'classroom'
     }
 });
 

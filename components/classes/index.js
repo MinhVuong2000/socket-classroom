@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
+const AuthMiddleWare = require('../../middlewares/auth_middleware.mdw')
 const classed_db = require('../../models/classes');
 const class_user_db = require('../../models/class_user');
+const detail_class = require('./detail_class')
 const BASEURL = 'http://localhost:3001/classes/inviteclass/'
 // const BASEURL = 'https://classroom-midterm-fe.herokuapp.com/classes/inviteclass/'
 
@@ -19,18 +21,19 @@ router.get('/', async function(req, res, next) {
 });
 
 /* GET a id. */
-router.get('/detail/:id', async function(req, res, next) {
-    if(req.jwtDecoded){
-        const idclass = parseInt(req.params.id);
-        console.log(req.jwtDecoded.data.id);
-        const item = await classed_db.one(idclass, req.jwtDecoded.data.id);
-        res.json(item);
-    }
-    else{
-        return res.json(null);
-    }
-    
-});
+// router.get('/detail/:id', async function(req, res, next) {
+//     if(req.jwtDecoded){
+//         const idclass = parseInt(req.params.id);
+//         console.log(req.jwtDecoded.data.id);
+//         const item = await classed_db.one(idclass, req.jwtDecoded.data.id);
+//         res.json(item);
+//     }
+//     else{
+//         return res.json(null);
+//     }
+// });
+
+router.use('/detail/:id', AuthMiddleWare.isAuthen, detail_class)
 
 router.get('/inviteclass/:link', async function(req, res, next) {
     if(req.jwtDecoded){

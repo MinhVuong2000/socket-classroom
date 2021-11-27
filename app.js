@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
-const passport = require('passport');
 require('dotenv').config();
 
 var authen_author = require('./components/authen_author'); 
@@ -25,10 +24,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
-app.use(passport.initialize());
 
 app.use('/', authen_author);
-app.use(AuthMiddleWare.isAuth);
+app.use(AuthMiddleWare.isAuthor);
 app.use('/users', usersRouter);
 app.use('/classes', classesRouter);
 

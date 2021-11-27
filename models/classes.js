@@ -90,4 +90,13 @@ module.exports = {
         });
         return true;
     },
+
+    async isOwnerClass(id_class, id_user){
+        let items = await db('classes').where({
+            'id_admin': id_user,
+            'id': id_class
+        });
+        console.log(items);
+        return items.length==0? false: true;
+    }
 }

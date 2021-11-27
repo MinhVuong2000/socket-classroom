@@ -3,7 +3,7 @@ CREATE TABLE class_user (
   "id_class" int4 NOT NULL,
   "id_user" int4 NOT NULL,
   "is_teacher" bool NOT NULL,
-  "mark" int4
+  "mark" float4
 )
 ;
 
@@ -20,6 +20,7 @@ INSERT INTO class_user VALUES (2, 1, 'f', NULL);
 INSERT INTO class_user VALUES (3, 3, 't', NULL);
 INSERT INTO class_user VALUES (3, 2, 'f', NULL);
 INSERT INTO class_user VALUES (3, 4, 'f', NULL);
+INSERT INTO class_user VALUES (2, 3, 't', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -81,6 +82,31 @@ INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (3, 'Nguyễn Thị Minh Vượ
 INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (4, 'Lê Thị Tuyết Trinh', 'trinh_312', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '312', NULL, NULL, NULL, -1);
 COMMIT;
 
+-- ----------------------------
+-- Table structure for assignments
+-- ----------------------------
+DROP TABLE IF EXISTS assignments;
+CREATE TABLE assignments (
+  "id" int4 NOT NULL GENERATED ALWAYS AS IDENTITY (
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 2147483647
+START 4
+),
+  "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
+  "point" int4 NOT NULL,
+  "id_class" int4 NOT NULL
+)
+;
+
+-- ----------------------------
+-- Records of assignments
+-- ----------------------------
+BEGIN;
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (1, 'Midterm', 100, 1);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (2, 'Midterm', 100, 2);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (3, 'Create Clone Classroom', 10, 1);
+COMMIT;
 
 -- ----------------------------
 -- Checks structure for table Class_User
@@ -123,4 +149,12 @@ ALTER TABLE class_user ADD CONSTRAINT "ID_USER_CLASSUSERUSER" FOREIGN KEY ("id_u
 -- ----------------------------
 ALTER TABLE classes ADD CONSTRAINT "ADMIN_CLASSUSER" FOREIGN KEY ("id_admin") REFERENCES users ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
-select * from users
+-- ----------------------------
+-- Primary Key structure for table assignments
+-- ----------------------------
+ALTER TABLE assignments ADD CONSTRAINT "assignments_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table assignments
+-- ----------------------------
+ALTER TABLE assignments ADD CONSTRAINT "ID_CLASS_ASSIGNMENT" FOREIGN KEY ("id_class") REFERENCES classes ("id") ON DELETE CASCADE ON UPDATE CASCADE;

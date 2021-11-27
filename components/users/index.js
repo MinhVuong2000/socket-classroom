@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const authentication = require('./controllers/authenController.js');
 
 
 router.get('/profile', async function(req, res, next) {
