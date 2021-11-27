@@ -7,7 +7,7 @@ const cors = require('cors');
 const passport = require('passport');
 require('dotenv').config();
 
-var roots = require('./components/users'); //./roots/authen_author
+var authen_author = require('./components/authen_author'); 
 var usersRouter = require('./components/users');
 var classesRouter = require('./components/classes');
 const AuthMiddleWare = require("./middlewares/auth_middleware.mdw");
@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(passport.initialize());
 
-app.use('/', roots);
+app.use('/', authen_author);
 app.use(AuthMiddleWare.isAuth);
 app.use('/users', usersRouter);
 app.use('/classes', classesRouter);
