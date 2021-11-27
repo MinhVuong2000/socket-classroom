@@ -1,53 +1,12 @@
-const class_db = require('../models/class.model');
-const user_db = require('../models/user.model');
-const class_user_db = require('../models/class_user.model')
+const class_db = require('../../../models/classes');
+const user_db = require('../../../models/users');
+const class_user_db = require('../../../models/class_user')
 const bcrypt = require('bcryptjs');
-const moment = require('moment');
-const nodemailer = require('nodemailer');
 const jwtHelper = require("../../../utils/jwt.helper");
 
 const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
-
-exports.passport_google = async (accessToken, refreshToken, profile, done) => {
-    console.log(profile)
-    const all_user = await user_db.all();
-    let min = 0;
-    all_user.forEach(character => {
-        if (character.id < min) {
-            min = character.id;
-        }
-    });
-    //get the user data from google 
-    const newUser = {
-        full_name: profile.displayName,
-        email: profile.emails[0].value,
-        username: profile.emails[0].value,
-        password: bcrypt.hashSync(profile.id,10),
-        id_uni: min-1,
-        otp:-1,
-    }
-    console.log(newUser)
-    try {
-        //find the user in our database 
-        let user = await user_db.findUserByEmail(newUser.email);
-
-        if (user) {
-            //If user present in our database.
-            console.log("Da ton tai google account")
-            done(null, user)
-        } else {
-            // if user is not preset in our database save user data to database.
-            console.log("Chua ton tai google account")
-            let userID = await user_db.addNewUser(newUser);
-            user = user_db.findUserByID(userID);
-            done(null, user);
-        }
-    } catch (err) {
-        console.error("Error login", err)
-    }
-}
 
 exports.register = async function(req, res) {
     //Get infor from form at FE (username/password/email/phone/mssv/fullname/address)
@@ -178,7 +137,7 @@ async function checkPassword(rows, req, res) {
     return res.json({'access_token':'error_password'});
   }
   else{
-    console.log("lgin thanh cong")
+    console.log("login thanh cong")
     return handle_login_successfully(rows, req, res, false);
   }
 }
