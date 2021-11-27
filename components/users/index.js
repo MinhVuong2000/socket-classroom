@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
-const user_db = require('./models/user.model');
+const user_db = require('../../models/users');
 
 const authentication = require('./controllers/authenController.js');
 const passport = require('passport');

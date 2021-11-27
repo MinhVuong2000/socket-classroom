@@ -1,4 +1,4 @@
-const db = require('../../../utils/connectDB')
+const db = require('../utils/connectDB')
 const user_db = require('./users')
 const class_user_db = require('./class_user')
 const class_user = require('./class_user')

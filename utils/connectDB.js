@@ -36,4 +36,4 @@ const knex = require('knex')({
     searchPath: ['knex', 'public'],
   });
 
-module.exports = knex;
+module.exports = knex_local;
