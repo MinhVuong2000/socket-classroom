@@ -98,5 +98,9 @@ module.exports = {
         });
         console.log(items);
         return items.length==0? false: true;
+    },
+
+    async del(id){
+        await db('classes').where('id', id).del();
     }
 }
