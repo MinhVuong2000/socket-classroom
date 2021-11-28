@@ -6,6 +6,7 @@ const classes_db = require('../../../models/classes')
 
 router.get('/', async function(req, res) {
     const item = await classes_db.one(req.id_class, req.jwtDecoded.data.id);
+    console.log(item);
     res.json(item);
 });
 

@@ -20,18 +20,30 @@ router.get('/', async function(req, res, next) {
     }
 });
 
-/* GET a id. */
-// router.get('/detail/:id', async function(req, res, next) {
-//     if(req.jwtDecoded){
-//         const idclass = parseInt(req.params.id);
-//         console.log(req.jwtDecoded.data.id);
-//         const item = await classed_db.one(idclass, req.jwtDecoded.data.id);
-//         res.json(item);
-//     }
-//     else{
-//         return res.json(null);
-//     }
-// });
+router.post('/', async function(req, res, next){
+    //const randomstr = randomstring(8);
+    //link = link + randomstr;
+    console.log(req.jwtDecoded);
+    if(req.jwtDecoded){
+        let enlink = encodeURI(req.body.class_name);
+        console.log("vao add class");
+        console.log("encode", enlink)
+        const new_class = {
+            class_name: req.body.class_name,
+            description: req.body.description,
+            id_admin: req.jwtDecoded.data.id,
+            invitation_link: enlink
+        };
+        console.log("new class", new_class);
+        await classed_db.add(new_class);
+        const allclassed_db = await classed_db.all(req.jwtDecoded.data.id);
+        res.json(allclassed_db);
+    }
+    else{
+        res.json(false);
+    }
+    
+}),
 
 router.use('/detail/:id', AuthMiddleWare.isAuthen, detail_class)
 
@@ -96,34 +108,10 @@ router.post('/sendinvite/:classlink', async function(req, res, next){
     return res.json(true);
 }),
 
-router.post('/', async function(req, res, next){
-    //const randomstr = randomstring(8);
-    //link = link + randomstr;
-    console.log(req.jwtDecoded);
-    if(req.jwtDecoded){
-        let enlink = encodeURI(req.body.class_name);
-        console.log("vao add class");
-        console.log("encode", enlink)
-        const new_class = {
-            class_name: req.body.class_name,
-            description: req.body.description,
-            id_admin: req.jwtDecoded.data.id,
-            invitation_link: enlink
-        };
-        console.log("new class", new_class);
-        await classed_db.add(new_class);
-        const allclassed_db = await classed_db.all(req.jwtDecoded.data.id);
-        res.json(allclassed_db);
-    }
-    else{
-        res.json(false);
-    }
-    
-}),
-
 router.get('/isExistedClassName', async function(req, res, next){
     const checked_name = req.query.checked_name;
     const isExisted = await classed_db.isExisted(checked_name);
+    console.log("isExistedName:",isExisted)
     res.json(isExisted);
 });
 

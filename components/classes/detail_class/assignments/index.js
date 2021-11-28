@@ -22,7 +22,8 @@ router.post("/", authMiddleWare.isOwnerClass, async function(req, res){
         id_class: req.id_class
     }
     await assignments_db.add(new_assignment);
-    return res.status(200).json(true);
+    new_assignments = await assignments_db.allInClass(req.id_class)
+    return res.status(200).json(new_assignments);
 });
 
 router.get('/detail/:id', async function(req, res) {

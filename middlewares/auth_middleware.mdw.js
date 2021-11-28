@@ -18,6 +18,7 @@ let isAuthor = async (req, res, next) => {
             return res.status(400).json('400');
         }
     } else {
+        console.log('error 401 isAuthor')
         return res.status(401).json('401');
     };
 }
@@ -25,8 +26,10 @@ let isAuthor = async (req, res, next) => {
 let isAuthen = async (req, res, next) => {
     const idclass = parseInt(req.params.id);
     const isExistUserOnClass = await class_user_db.checkIsExistUserOnClass(idclass, req.jwtDecoded.data.id)
-    if (isExistUserOnClass==false)
-        return res.status(403);//.json(403)
+    if (isExistUserOnClass==false){
+        console.log('error 403 isAuthen')
+        return res.status(403).json("403")
+    }
     req.id_class = req.params.id;
     next();
 }
@@ -36,9 +39,8 @@ let isOwnerClass = async (req, res, next) => {
     const id_user = req.jwtDecoded.data.id;
     const isOwnerClass = await classes_db.isOwnerClass(id_class, id_user)
     if (isOwnerClass==false){
-        return res.status(403).json({
-            msg:'You are not admin of the class'
-        });
+        console.log('error 403 isOwnerClass')
+        return res.status(403).json('403');
     }
     next();
 }
@@ -48,9 +50,8 @@ let isAssignmentinClass = async (req, res, next) => {
     const id_assignment = req.params.id
     const isOwnerClass = await assignments_db.isAssignmentinClass(id_assignment, id_class);
     if (isOwnerClass==false){
-        return res.status(403).json({
-            msg:'This assignment is not in the class'
-        });
+        console.log('error 403 isAssignmentinClass')
+        return res.status(403).json('403');
     }
     next();
 }
