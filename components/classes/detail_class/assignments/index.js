@@ -9,7 +9,8 @@ router.get('/', async function(req, res, next) {
     //show list assignments
     //name, point
     const id_class = req.id_class;
-    res.json("No implementation")
+    const items = await assignments_db.allInClass(id_class);
+    res.status(200).json(items)
 });
 
 router.post("/", authMiddleWare.isOwnerClass, async function(req, res){
@@ -28,7 +29,8 @@ router.get('/detail/:id', async function(req, res) {
     //show detail of a assignment
     //name, point
     const id_assignment = req.params.id;
-    res.json("No implementation")
+    const item = await assignments_db.one(id_assignment);
+    res.status(200).json(item)
 });
 
 router.delete('/detail/:id', authMiddleWare.isOwnerClass, authMiddleWare.isAssignmentinClass, async function(req, res){

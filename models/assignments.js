@@ -6,6 +6,10 @@ module.exports = {
         return db('assignments');
     },
 
+    allInClass(id_class){
+        return db('assignments').where("id_class", id_class);
+    },
+
     async one(id){
         const items = await db('assignments').where({id:id});
         return items.length > 0? items[0]: null;
