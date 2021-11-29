@@ -49,7 +49,7 @@ router.delete('/detail/:id', authMiddleWare.isOwnerClass, authMiddleWare.isAssig
     await assignments_db.del(req.params.id);
     return res.status(200).json(true);
 });
-router.post('/updateorder', async function(req, res){
+router.post('/updateorder', authMiddleWare.isOwnerClass, async function(req, res){
     // authMiddleWare.isOwnerClass(req, res, next);
     console.log("req.body.idclass:",req.body.idclass);
     console.log("Source and Destination: ", req.body.source,"; ", req.body.destination);
@@ -82,8 +82,8 @@ router.post('/updateorder', async function(req, res){
     console.log(listitem2);
     return res.status(200).json(listitem2);
 });
-router.post('/edit', async function(req, res){
-    console.log("req.body:",req.body);
+router.post('/edit', authMiddleWare.isOwnerClass, async function(req, res){
+    console.log("req.body edit:",req.body);
     const edititem = await assignments_db.editAssignment(req.body.idassignment, req.body.name, req.body.point);
     
     const listitem2 = await assignments_db.allInClass(req.body.idclass);
