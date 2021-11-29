@@ -95,7 +95,8 @@ START 4
 ),
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "point" int4 NOT NULL,
-  "id_class" int4 NOT NULL
+  "id_class" int4 NOT NULL,
+  "orders" int4,
 )
 ;
 
@@ -103,9 +104,9 @@ START 4
 -- Records of assignments
 -- ----------------------------
 BEGIN;
-INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (1, 'Midterm', 100, 1);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (1, 'Midterm', 100, 1, 0);
 INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (2, 'Midterm', 100, 2);
-INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (3, 'Create Clone Classroom', 10, 1);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (3, 'Create Clone Classroom', 10, 1, 3);
 COMMIT;
 
 -- ----------------------------
