@@ -31,5 +31,15 @@ module.exports = {
             return false;
         }
         return true;
-    }
+    },
+
+    async isTeacherinClass(id_class, id_user){
+        let items = await db('class_user').where({
+            'id_user': id_user,
+            'id_class': id_class,
+            'is_teacher': true,
+        });
+        console.log(items);
+        return items.length==0? false: true;
+    },
 }

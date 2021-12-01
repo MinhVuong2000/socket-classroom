@@ -15,7 +15,7 @@ router.get('/', async function(req, res, next) {
     res.status(200).json(items)
 });
 
-router.post("/", authMiddleWare.isOwnerClass, async function(req, res){
+router.post("/", authMiddleWare.isTeacherinClass, async function(req, res){
     console.log(req.body)
     console.log(req.id_class);
     
@@ -43,14 +43,12 @@ router.get('/detail/:id', async function(req, res) {
     res.status(200).json(item)
 });
 
-router.delete('/detail/:id', authMiddleWare.isOwnerClass, authMiddleWare.isAssignmentinClass, async function(req, res){
-    // authMiddleWare.isOwnerClass(req, res, next);
+router.delete('/detail/:id', authMiddleWare.isTeacherinClass, authMiddleWare.isAssignmentinClass, async function(req, res){
     console.log("req.params.id:",req.params.id);
     await assignments_db.del(req.params.id);
     return res.status(200).json(true);
 });
-router.post('/updateorder', authMiddleWare.isOwnerClass, async function(req, res){
-    // authMiddleWare.isOwnerClass(req, res, next);
+router.post('/updateorder', authMiddleWare.isTeacherinClass, async function(req, res){
     console.log("req.body.idclass:",req.body.idclass);
     console.log("Source and Destination: ", req.body.source,"; ", req.body.destination);
     const source = req.body.source;
@@ -82,7 +80,7 @@ router.post('/updateorder', authMiddleWare.isOwnerClass, async function(req, res
     console.log(listitem2);
     return res.status(200).json(listitem2);
 });
-router.post('/edit', authMiddleWare.isOwnerClass, async function(req, res){
+router.post('/edit', authMiddleWare.isTeacherinClass, async function(req, res){
     console.log("req.body edit:",req.body);
     const edititem = await assignments_db.editAssignment(req.body.idassignment, req.body.name, req.body.point);
     

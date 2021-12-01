@@ -45,6 +45,17 @@ let isOwnerClass = async (req, res, next) => {
     next();
 }
 
+let isTeacherinClass = async (req, res, next) => {
+    const id_class = parseInt(req.id_class);
+    const id_user = req.jwtDecoded.data.id;
+    const isOwnerClass = await class_user_db.isTeacherinClass(id_class, id_user)
+    if (isOwnerClass==false){
+        console.log('error 403 isTeacherinClass')
+        return res.status(403).json('403');
+    }
+    next();
+}
+
 let isAssignmentinClass = async (req, res, next) => {
     const id_class = parseInt(req.id_class);
     const id_assignment = req.params.id
@@ -60,5 +71,6 @@ module.exports = {
     isAuthor: isAuthor,
     isAuthen: isAuthen,
     isOwnerClass: isOwnerClass,
+    isTeacherinClass: isTeacherinClass,
     isAssignmentinClass: isAssignmentinClass
 };
