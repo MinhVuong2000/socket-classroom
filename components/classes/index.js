@@ -5,8 +5,8 @@ const AuthMiddleWare = require('../../middlewares/auth_middleware.mdw')
 const classed_db = require('../../models/classes');
 const class_user_db = require('../../models/class_user');
 const detail_class = require('./detail_class')
-const BASEURL = 'http://localhost:3001/classes/inviteclass/'
-// const BASEURL = 'https://classroom-midterm-fe.herokuapp.com/classes/inviteclass/'
+// const BASEURL = 'http://localhost:3001/classes/inviteclass/'
+const BASEURL = 'https://classroom-assigment-fe.herokuapp.com/classes/inviteclass/'
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
