@@ -19,7 +19,7 @@ router.post('/add-students', async (req, res) => {
     const id_class = req.body.id_class;
     for (let i = 0; i < new_students_list.length; i++){
         new_students_list[i].id_class = id_class;
-        new_students_list[i].id_teacher = -1;
+        new_students_list[i].is_teacher = false;
     }
     const updated_student_list = await class_user_db.add(new_students_list);
     res.json(updated_student_list);
