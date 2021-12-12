@@ -13,6 +13,7 @@ module.exports = {
             let item = {};
             item.full_name = items[0].full_name;
             item.username = items[0].username;
+            item.id_uni = items[0].id_uni;
             return item;
         }
         return items[0];

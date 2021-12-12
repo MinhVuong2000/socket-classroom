@@ -1,8 +1,9 @@
 DROP TABLE IF EXISTS class_user;
 CREATE TABLE class_user (
   "id_class" int4 NOT NULL,
-  "id_user" int4 NOT NULL,
-  "is_teacher" bool NOT NULL,
+  "id_uni_student" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+  "id_teacher" int4 NOT NULL,
+  "full_name_user" varchar(255) COLLATE "pg_catalog"."default",
   "mark" float4
 )
 ;
@@ -12,15 +13,15 @@ CREATE TABLE class_user (
 -- Records of Class_User
 -- ----------------------------
 BEGIN;
-INSERT INTO class_user VALUES (1, 1, 't', NULL);
-INSERT INTO class_user VALUES (1, 2, 'f', NULL);
-INSERT INTO class_user VALUES (1, 3, 'f', NULL);
-INSERT INTO class_user VALUES (2, 2, 't', NULL);
-INSERT INTO class_user VALUES (2, 1, 'f', NULL);
-INSERT INTO class_user VALUES (3, 3, 't', NULL);
-INSERT INTO class_user VALUES (3, 2, 'f', NULL);
-INSERT INTO class_user VALUES (3, 4, 'f', NULL);
-INSERT INTO class_user VALUES (2, 3, 't', NULL);
+INSERT INTO class_user VALUES (1, '-1', 123, "Nguyễn Văn A", NULL);
+INSERT INTO class_user VALUES (1, '124', -1, "Võ Xuân Đức Thắng", NULL);
+INSERT INTO class_user VALUES (1, '111', -1, "Lê Văn Lượng", NULL);
+INSERT INTO class_user VALUES (2, '124', -1, "Huỳnh Văn Minh", NULL);
+INSERT INTO class_user VALUES (2, '-1', 123, "Lê Thị Tuyết Trinh", NULL);
+INSERT INTO class_user VALUES (2, '321', -1, "Nguyễn Thị Minh Vượng", NULL);
+INSERT INTO class_user VALUES (3, '123', -1, "Nguyễn Văn A", NULL);
+INSERT INTO class_user VALUES (3, '321', -1, "Nguyễn Thị Minh Vượng", NULL);
+INSERT INTO class_user VALUES (3, '-1', 312, "Lê Thị Tuyết Trinh", NULL);
 COMMIT;
 
 -- ----------------------------
@@ -96,7 +97,7 @@ START 4
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "point" int4 NOT NULL,
   "id_class" int4 NOT NULL,
-  "orders" int4,
+  "orders" int4
 )
 ;
 
@@ -117,7 +118,7 @@ ALTER TABLE class_user ADD CONSTRAINT "VALID_MARK" CHECK (mark >= 0 AND mark <= 
 -- ----------------------------
 -- Primary Key structure for table Class_User
 -- ----------------------------
-ALTER TABLE class_user ADD CONSTRAINT "Class_User_pkey" PRIMARY KEY ("id_class", "id_user");
+ALTER TABLE class_user ADD CONSTRAINT "Class_User_pkey" PRIMARY KEY ("id_class", "id_uni_student", "id_teacher");
 
 -- ----------------------------
 -- Uniques structure for table Classes
@@ -143,7 +144,6 @@ ALTER TABLE users ADD CONSTRAINT "Users_pkey" PRIMARY KEY ("id");
 -- Foreign Keys structure for table Class_User
 -- ----------------------------
 ALTER TABLE class_user ADD CONSTRAINT "ID_CLASS_CLASSUSERCLASS" FOREIGN KEY ("id_class") REFERENCES classes ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE class_user ADD CONSTRAINT "ID_USER_CLASSUSERUSER" FOREIGN KEY ("id_user") REFERENCES users ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- ----------------------------
 -- Foreign Keys structure for table Classes

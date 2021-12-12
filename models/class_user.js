@@ -6,6 +6,11 @@ module.exports = {
         return db('class_user');
     },
 
+    async add(new_students_class){
+        await db('class_user').insert(new_students_class);
+        return roleByClass(new_students_class[0].id_class, false); // return new list of students
+    },
+
     async roleByClass(classID, is_teacher){
         let items = await db('class_user').where({id_class:classID,is_teacher:is_teacher})
         for (let i = 0; i < items.length; i++){
