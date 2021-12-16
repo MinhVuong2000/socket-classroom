@@ -12,7 +12,7 @@ const BASEURL = 'http://localhost:3001/classes/inviteclass/'
 router.get('/', async function(req, res, next) {
     if(req.jwtDecoded){
         //console.log(req.jwtDecoded.data.id);
-        const allData = await classed_db.all(req.jwtDecoded.data.id);
+        const allData = await classed_db.all(req.jwtDecoded.data.id_uni);
         res.json(allData);
     }
     else{
@@ -34,9 +34,10 @@ router.post('/', async function(req, res, next){
             id_admin: req.jwtDecoded.data.id,
             invitation_link: enlink
         };
+        
         console.log("new class", new_class);
-        await classed_db.add(new_class);
-        const allclassed_db = await classed_db.all(req.jwtDecoded.data.id);
+        await classed_db.add(new_class, req.jwtDecoded.data.id_uni, req.jwtDecoded.data.full_name);
+        const allclassed_db = await classed_db.all(req.jwtDecoded.data.id_uni);
         res.json(allclassed_db);
     }
     else{
@@ -58,9 +59,9 @@ router.get('/inviteclass/:link', async function(req, res, next) {
         if(itemid == null){
             return res.json(null);
         }
-        let flag = await class_user_db.checkIsExistUserOnClass(itemid, req.jwtDecoded.data.id)
+        let flag = await class_user_db.checkIsExistUserOnClass(itemid, req.jwtDecoded.data.id_uni)
         if(!flag){
-            await class_user_db.addUserToClass(itemid, req.jwtDecoded.data.id);
+            await class_user_db.addUserToClass(itemid, req.jwtDecoded.data.id_uni);
         }
         const items = await classed_db.one(itemid, req.jwtDecoded.data.id);
         res.json(items);

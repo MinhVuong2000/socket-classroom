@@ -18,6 +18,19 @@ module.exports = {
         }
         return items[0];
     },
+    async oneIDUni(IDuni, is_detail=false){
+        let items = await db('users').where('id_uni', IDuni);
+        if (items.length==0)
+            return null;
+        if (!is_detail){
+            let item = {};
+            item.full_name = items[0].full_name;
+            item.username = items[0].username;
+            item.id_uni = items[0].id_uni;
+            return item;
+        }
+        return items[0];
+    },
 
     async findUserByID(ID, is_detail=false){
         let items = await db('users').where('id', ID);

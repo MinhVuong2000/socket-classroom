@@ -5,7 +5,7 @@ const class_user = require('./class_user')
 
 module.exports = {
     async all(iduser){
-        let listclass_user = await db('class_user').where('id_user', iduser);
+        let listclass_user = await db('class_user').where('id_uni_user', iduser);
         if(listclass_user.length == 0){
             return {message: 'not enroll class'};
         }
@@ -22,12 +22,13 @@ module.exports = {
         return listitems;
     },
 
-    async one(idclass, iduser){
+    async one(idclass, id_uni){
+
         let class_user_item = await db('class_user').where({
-            'id_user': iduser,
+            'id_uni_user': id_uni,
             'id_class': idclass
         });
-        console.log(class_user_item);
+        console.log("Class user item",class_user_item);
         if (class_user_item.length==0){
             return {message: 'not enroll class'};
         }
@@ -36,8 +37,11 @@ module.exports = {
             return {message: 'not enroll class'};
         }
         item = item[0];
+        console.log("item trong cai one của class ne: ", item)
         item.admin_info = await user_db.one(item.id_admin);
-        item.list_teacher = await class_user_db.roleByClass(idclass,true)
+        console.log("Admin info ne: ", item);
+        item.list_teacher = await class_user_db.roleByClass(idclass,true);
+        console.log("List teacher ne: ", item);
         item.list_student = await class_user_db.roleByClass(idclass,false);
         item.isTeacher = class_user_item[0].is_teacher;
         console.log(item);
@@ -75,7 +79,7 @@ module.exports = {
         return item.length>0 ? true : false;
     },
 
-    async add(new_classroom){
+    async add(new_classroom, iduni, fullname){
         await db('classes').insert(new_classroom);
         let items = await db('classes').where({
             class_name: new_classroom.class_name
@@ -85,8 +89,9 @@ module.exports = {
         }
         await db('class_user').insert({
             id_class: items[0].id,
-            id_user: new_classroom.id_admin,
-            is_teacher: true
+            id_uni_user: iduni,
+            is_teacher: true,
+            full_name_user: fullname
         });
         return true;
     },
