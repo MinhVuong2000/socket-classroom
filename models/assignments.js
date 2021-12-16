@@ -54,4 +54,12 @@ module.exports = {
                 });
         return true;
     },
+    async updateShowGradeByIDAssignment(idassignment, state){
+        return db('assignments').update({
+                                        showgrade: state
+                                    })
+                                    .where({
+                                        id_assignment: idassignment
+                                    });
+    },
 }

@@ -6,8 +6,8 @@
 -- Database: classroom
 
 --DROP DATABASE IF EXISTS classroom;
-DROP TABLE IF EXISTS assignments;
 DROP TABLE IF EXISTS user_assignments;
+DROP TABLE IF EXISTS assignments;
 DROP TABLE IF EXISTS class_user;
 CREATE TABLE class_user (
   "id_class" int4 NOT NULL,
@@ -107,7 +107,8 @@ START 4
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "point" int4 NOT NULL,
   "id_class" int4 NOT NULL,
-  "orders" int4
+  "orders" int4,
+  "showgrade" bool
 )
 ;
 
@@ -115,7 +116,7 @@ CREATE TABLE user_assignments (
     "id_user_uni" int4 NOT NULL,
     "id_assignment" int4 NOT NULL,
     "id_class" int4 NOT NULL,
-    "point" int4
+    "grade" int4
 );
 
 -- ----------------------------
