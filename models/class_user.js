@@ -8,14 +8,23 @@ module.exports = {
 
     async add(new_students_class){
         await db('class_user').insert(new_students_class);
-        return roleByClass(new_students_class[0].id_class, false); // return new list of students
+    },
+
+    async modify_fullname(id_class, id_uni_user, full_name_user){
+        return await db('class_user').where({
+            'id_class': id_class, 
+            'id_uni_user': id_uni_user
+        }).update('full_name_user', full_name_user)
     },
 
     async roleByClass(classID, is_teacher){
         let items = await db('class_user').where({id_class:classID,is_teacher:is_teacher})
-        for (let i = 0; i < items.length; i++){
-            items[i] = await user_db.oneIDUni(items[i].id_uni_user);
+        if (is_teacher){
+            for (let i = 0; i < items.length; i++){
+                items[i] = await user_db.oneIDUni(items[i].id_uni_user);
+            }
         }
+        console.log(items);
         return items;
     },
     async addUserToClass(classID, userid){

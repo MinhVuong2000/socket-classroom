@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const assignments = require('./assignments')
 const classes_db = require('../../../models/classes')
-const users_db = require('../../../models/users')
+const class_user_db = require('../../../models/class_user')
 const authMiddleWare = require('../../../middlewares/auth_middleware.mdw')
 
 
@@ -22,7 +22,23 @@ router.post('/add-students', async (req, res) => {
         new_students_list[i].id_class = id_class;
         new_students_list[i].is_teacher = false;
     }
-    const updated_student_list = await class_user_db.add(new_students_list);
+    await class_user_db.add(new_students_list);
+    const updated_student_list = await class_user_db.roleByClass(id_class, false);
+    console.log("updated_student_list ADD: ", updated_student_list);
+    res.json(updated_student_list);
+});
+
+router.patch('/update-students-name', async (req, res) => {
+    // change full_name of existed students in class_user, 
+    // full name displayed in member list to get full name in table class_user
+    let repeat_students_list = req.body.repeat_students;
+    // console.log(repeat_students_list);
+    const id_class = req.body.id_class;
+    for (let i = 0; i < repeat_students_list.length; i++){
+        await class_user_db.modify_fullname(id_class, repeat_students_list[i].id_uni_user, repeat_students_list[i].full_name_user);
+    }
+    const updated_student_list = await class_user_db.roleByClass(id_class, false);
+    console.log("updated_student_list Change fullname: ", updated_student_list);
     res.json(updated_student_list);
 });
 
