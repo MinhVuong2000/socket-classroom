@@ -120,7 +120,12 @@ module.exports = {
             return null;
         return items[0];
     },
-    async addNewUser(new_user){
+    
+    addNewUser(new_user){
         return db('users').insert(new_user);
+    },
+
+    updateProfile(id, updated_profile){
+        return db('users').where('id', id).update(updated_profile);
     }
 }
