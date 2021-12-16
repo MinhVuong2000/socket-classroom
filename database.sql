@@ -1,3 +1,13 @@
+-- Database: new_classroom
+
+-- DROP DATABASE IF EXISTS new_classroom;
+
+
+-- Database: classroom
+
+--DROP DATABASE IF EXISTS classroom;
+DROP TABLE IF EXISTS assignments;
+DROP TABLE IF EXISTS user_assignments;
 DROP TABLE IF EXISTS class_user;
 CREATE TABLE class_user (
   "id_class" int4 NOT NULL,
@@ -13,15 +23,15 @@ CREATE TABLE class_user (
 -- Records of Class_User
 -- ----------------------------
 BEGIN;
-INSERT INTO class_user VALUES (1, '123', t, "Nguyễn Văn A", NULL);
-INSERT INTO class_user VALUES (1, '124', f, "Võ Xuân Đức Thắng", NULL);
-INSERT INTO class_user VALUES (1, '111', f, "Lê Văn Lượng", NULL);
-INSERT INTO class_user VALUES (2, '124', f, "Huỳnh Văn Minh", NULL);
-INSERT INTO class_user VALUES (2, '123', t, "Lê Thị Tuyết Trinh", NULL);
-INSERT INTO class_user VALUES (2, '321', f, "Nguyễn Thị Minh Vượng", NULL);
-INSERT INTO class_user VALUES (3, '123', f, "Nguyễn Văn A", NULL);
-INSERT INTO class_user VALUES (3, '321', f, "Nguyễn Thị Minh Vượng", NULL);
-INSERT INTO class_user VALUES (3, '312', t, "Lê Thị Tuyết Trinh", NULL);
+INSERT INTO class_user VALUES (1, '123', TRUE, 'Nguyễn Văn A', NULL);
+INSERT INTO class_user VALUES (1, '124', FALSE, 'Võ Xuân Đức Thắng', NULL);
+INSERT INTO class_user VALUES (1, '111', FALSE, 'Lê Văn Lượng', NULL);
+INSERT INTO class_user VALUES (2, '124', FALSE, 'Huỳnh Văn Minh', NULL);
+INSERT INTO class_user VALUES (2, '123', TRUE, 'Lê Thị Tuyết Trinh', NULL);
+INSERT INTO class_user VALUES (2, '321', FALSE, 'Nguyễn Thị Minh Vượng', NULL);
+INSERT INTO class_user VALUES (3, '123', FALSE, 'Nguyễn Văn A', NULL);
+INSERT INTO class_user VALUES (3, '321', FALSE, 'Nguyễn Thị Minh Vượng', NULL);
+INSERT INTO class_user VALUES (3, '312', TRUE, 'Lê Thị Tuyết Trinh', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -86,7 +96,7 @@ COMMIT;
 -- ----------------------------
 -- Table structure for assignments
 -- ----------------------------
-DROP TABLE IF EXISTS assignments;
+
 CREATE TABLE assignments (
   "id" int4 NOT NULL GENERATED ALWAYS AS IDENTITY (
 INCREMENT 1
@@ -101,12 +111,19 @@ START 4
 )
 ;
 
+CREATE TABLE user_assignments (
+    "id_user_uni" int4 NOT NULL,
+    "id_assignment" int4 NOT NULL,
+    "id_class" int4 NOT NULL,
+    "point" int4
+);
+
 -- ----------------------------
 -- Records of assignments
 -- ----------------------------
 BEGIN;
 INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (1, 'Midterm', 100, 1, 0);
-INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (2, 'Midterm', 100, 2);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (2, 'Midterm', 100, 2, 0);
 INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (3, 'Create Clone Classroom', 10, 1, 3);
 COMMIT;
 
@@ -159,3 +176,15 @@ ALTER TABLE assignments ADD CONSTRAINT "assignments_pkey" PRIMARY KEY ("id");
 -- Foreign Keys structure for table assignments
 -- ----------------------------
 ALTER TABLE assignments ADD CONSTRAINT "ID_CLASS_ASSIGNMENT" FOREIGN KEY ("id_class") REFERENCES classes ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- ----------------------------
+-- Primary Key structure for table user_assignments
+-- ----------------------------
+ALTER TABLE user_assignments ADD CONSTRAINT "user_assignments_pkey" PRIMARY KEY ("id_user_uni", "id_assignment", "id_class");
+
+-- ----------------------------
+-- Foreign Keys structure for table assignments
+-- ----------------------------
+ALTER TABLE user_assignments ADD CONSTRAINT "ID_UserAssigments_ASSIGNMENT" FOREIGN KEY ("id_assignment") REFERENCES assignments ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE user_assignments ADD CONSTRAINT "ID_UserAssigments_Class" FOREIGN KEY ("id_class") REFERENCES classes ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+--ALTER TABLE user_assignments ADD CONSTRAINT "ID_UserAssigments_User" FOREIGN KEY ("id_user_uni") REFERENCES users ("id_uni") ON DELETE CASCADE ON UPDATE CASCADE;
