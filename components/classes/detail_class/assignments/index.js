@@ -3,7 +3,7 @@ const router = express.Router();
 const authMiddleWare = require('../../../../middlewares/auth_middleware.mdw');
 const { updateOrderByIdAssignment } = require('../../../../models/assignments');
 const assignments_db = require('../../../../models/assignments')
-
+const user_assignment_db = require('../../../../models/user_assignments')
 //url: /detail/:id/assigments
 
 router.get('/', async function(req, res, next) {
@@ -28,7 +28,8 @@ router.post("/", authMiddleWare.isTeacherinClass, async function(req, res){
         name: req.body.name,
         point: req.body.point,
         id_class: req.id_class,
-        orders: maxOrder
+        orders: maxOrder,
+        showgrade: false
     }
     await assignments_db.add(new_assignment);
     new_assignments = await assignments_db.allInClass(req.id_class)
@@ -88,6 +89,28 @@ router.post('/edit', authMiddleWare.isTeacherinClass, async function(req, res){
     await listitem2.sort((firstItem, secondItem) => firstItem.orders - secondItem.orders);
     console.log(listitem2);
     return res.status(200).json(listitem2);
+});
+router.post('/addgradeassignment', authMiddleWare.isTeacherinClass, async function(req, res){
+    // add a new student to class_user, 
+    // full name displayed in member list to get full name in table class_user
+    let new_user_grade = req.body.new_user_grade;
+    const id_class = req.body.id_class;
+    const id_assignment = req.body.id_assignment;
+    console.log(req.body);
+    for (let i = 0; i < new_user_grade.length; i++){
+        let flag = await user_assignment_db.find1ScoreByIDAssignmentUser(id_assignment, new_user_grade[i].id_user_uni);
+        if(flag == null){
+            new_user_grade[i].id_class = id_class;
+            new_user_grade[i].id_assignment = id_assignment;
+            await user_assignment_db.addAssigmentGrade(new_user_grade[i]);
+        }
+        else{
+            await user_assignment_db.updateAssigmentGrade(id_assignment, new_user_grade[i].id_user_uni, new_user_grade[i].grade);
+        }
+        
+    }
+    const updated_user_grade = await user_assignment_db.findAllScoreByIDAssignment(id_assignment);
+    res.json(updated_user_grade);
 });
 
 module.exports = router;
