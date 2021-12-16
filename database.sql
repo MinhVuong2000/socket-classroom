@@ -13,8 +13,7 @@ CREATE TABLE class_user (
   "id_class" int4 NOT NULL,
   "id_uni_user" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "is_teacher" bool NOT NULL,
-  "full_name_user" varchar(255) COLLATE "pg_catalog"."default",
-  "mark" float4
+  "full_name_user" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
 
@@ -23,15 +22,15 @@ CREATE TABLE class_user (
 -- Records of Class_User
 -- ----------------------------
 BEGIN;
-INSERT INTO class_user VALUES (1, '123', TRUE, 'Nguyễn Văn A', NULL);
-INSERT INTO class_user VALUES (1, '124', FALSE, 'Võ Xuân Đức Thắng', NULL);
-INSERT INTO class_user VALUES (1, '111', FALSE, 'Lê Văn Lượng', NULL);
-INSERT INTO class_user VALUES (2, '124', FALSE, 'Huỳnh Văn Minh', NULL);
-INSERT INTO class_user VALUES (2, '123', TRUE, 'Lê Thị Tuyết Trinh', NULL);
-INSERT INTO class_user VALUES (2, '321', FALSE, 'Nguyễn Thị Minh Vượng', NULL);
-INSERT INTO class_user VALUES (3, '123', FALSE, 'Nguyễn Văn A', NULL);
-INSERT INTO class_user VALUES (3, '321', FALSE, 'Nguyễn Thị Minh Vượng', NULL);
-INSERT INTO class_user VALUES (3, '312', TRUE, 'Lê Thị Tuyết Trinh', NULL);
+INSERT INTO class_user VALUES (1, '123', TRUE, 'Nguyễn Văn A');
+INSERT INTO class_user VALUES (1, '124', FALSE, 'Võ Xuân Đức Thắng');
+INSERT INTO class_user VALUES (1, '111', FALSE, 'Lê Văn Lượng');
+INSERT INTO class_user VALUES (2, '124', FALSE, 'Huỳnh Văn Minh');
+INSERT INTO class_user VALUES (2, '123', FALSE, 'Lê Thị Tuyết Trinh');
+INSERT INTO class_user VALUES (2, '321', TRUE, 'Nguyễn Thị Minh Vượng');
+INSERT INTO class_user VALUES (3, '123', FALSE, 'Nguyễn Văn A');
+INSERT INTO class_user VALUES (3, '321', FALSE, 'Nguyễn Thị Minh Vượng');
+INSERT INTO class_user VALUES (3, '312', TRUE, 'Lê Thị Tuyết Trinh');
 COMMIT;
 
 -- ----------------------------
