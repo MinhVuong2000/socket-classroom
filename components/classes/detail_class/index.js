@@ -23,6 +23,19 @@ router.post('/add-students', async (req, res) => {
         new_students_list[i].is_teacher = false;
     }
     await class_user_db.add(new_students_list);
+    //TODO: When new user add to class, thêm điểm trong User_Assignment là null
+    let listAssignment = await assignments_db.allInClass(id_class);
+    for(i = 0; i< listAssignment.length; i++){
+        for(j = 0; j<new_students_list.length; j++){
+            let tempUserAssignment = {
+                id_user_uni: new_students_list[j].id_uni,
+                id_assignment: listAssignment[i].id,
+                id_class: id_class,
+                grade: null
+            };
+            await user_assignment_db.addAssigmentGrade(tempUserAssignment);
+        } 
+    }
     const updated_student_list = await class_user_db.roleByClass(id_class, false);
     console.log("updated_student_list ADD: ", updated_student_list);
     res.json(updated_student_list);
