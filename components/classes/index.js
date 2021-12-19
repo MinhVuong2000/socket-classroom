@@ -4,6 +4,8 @@ const nodemailer = require('nodemailer');
 const AuthMiddleWare = require('../../middlewares/auth_middleware.mdw')
 const classed_db = require('../../models/classes');
 const class_user_db = require('../../models/class_user');
+const assignments_db = require('../../models/assignments');
+const user_assignment_db = require('../../models/user_assignments');
 const detail_class = require('./detail_class')
 const BASEURL = 'http://localhost:3001/classes/inviteclass/'
 // const BASEURL = 'https://classroom-assigment-fe.herokuapp.com/classes/inviteclass/'
@@ -62,6 +64,17 @@ router.get('/inviteclass/:link', async function(req, res, next) {
         let flag = await class_user_db.checkIsExistUserOnClass(itemid, req.jwtDecoded.data.id_uni)
         if(!flag){
             await class_user_db.addUserToClass(itemid, req.jwtDecoded.data.id_uni);
+            //TODO: When new user add to class, thêm điểm trong User_Assignment là null
+            let listAssignment = await assignments_db.allInClass(itemid);
+            for(i = 0; i< listAssignment.length; i++){
+                let tempUserAssignment = {
+                    id_user_uni: req.jwtDecoded.data.id_uni,
+                    id_assignment: listAssignment[i].id,
+                    id_class: itemid,
+                    grade: null
+                };
+                await user_assignment_db.addAssigmentGrade(tempUserAssignment);
+            }
         }
         const items = await classed_db.one(itemid, req.jwtDecoded.data.id);
         res.json(items);
