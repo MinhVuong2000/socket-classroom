@@ -56,4 +56,12 @@ module.exports = {
         console.log(items);
         return items.length==0? false: true;
     },
+    async allStudentInClass(id_class){
+        let items = await db('class_user').where({
+            'id_class': id_class,
+            'is_teacher': false,
+        });
+        //console.log(items);
+        return items.length==0? false: items;
+    },
 }

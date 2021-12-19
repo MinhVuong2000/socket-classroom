@@ -66,7 +66,7 @@ module.exports = {
         let item = await db('classes').where('invitation_link', link);
         // console.log("typeof item:" + typeof item);
         // console.log("item 0:" + item[0]);
-        console.log("found ID: " + item[0].id);
+        //console.log("found ID: " + item[0].id);
         if (item.length==0){
             return null;
         }

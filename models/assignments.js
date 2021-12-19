@@ -14,6 +14,10 @@ module.exports = {
         const items = await db('assignments').where({id:id});
         return items.length > 0? items[0]: null;
     },
+    async findAssignmentByNameIDClass(idclass, name){
+        const items = await db('assignments').where({id_class:idclass, name: name});
+        return items.length > 0? items[0]: null;
+    },
 
     add(new_assignment){
         return db('assignments').insert(new_assignment);
