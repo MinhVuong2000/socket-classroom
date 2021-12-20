@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleWare = require('../../../../middlewares/auth_middleware.mdw');
-const { updateOrderByIdAssignment } = require('../../../../models/assignments');
+const { updateOrderByIdAssignment, assignmentShowGrade } = require('../../../../models/assignments');
 const assignments_db = require('../../../../models/assignments')
 const user_assignment_db = require('../../../../models/user_assignments');
 const class_user_db = require('../../../../models/class_user');
@@ -105,6 +105,23 @@ router.post('/edit', authMiddleWare.isTeacherinClass, async function(req, res){
     console.log(listitem2);
     return res.status(200).json(listitem2);
 });
+
+router.post('/updateshowstate', authMiddleWare.isTeacherinClass, async function(req, res){
+    console.log("req của updateShowState: ", req.body)
+    await assignments_db.updateShowGradeByIDAssignment(req.body.id_assignment, req.body.statechange);
+    const id_class = req.body.id_class;
+    let listShow = [];
+    let assignmentShow = await assignments_db.assignmentShowGrade(id_class, true);
+    if (assignmentShow == null){
+        res.json([]);
+    }
+    for(let i = 0; i<assignmentShow.length; i++){
+        listShow.push(assignmentShow[i].id)
+    }
+    console.log("Day la list updateshowstate: ", listShow)
+    res.json(listShow);
+});
+
 router.post('/addgradeassignment', authMiddleWare.isTeacherinClass, async function(req, res){
     // DESCRIPTION: Add assignment (with grade list from excel) to class
 
@@ -157,6 +174,20 @@ router.post('/getgradeboard', authMiddleWare.isAuthen, async function(req, res){
     }
     console.log("Structure: ", structure);
     res.json(structure);
+});
+
+router.post('/getlistshowgrade', authMiddleWare.isAuthen, async function(req, res){
+    const id_class = req.body.id_class;
+    let listShow = [];
+    let assignmentShow = await assignments_db.assignmentShowGrade(id_class, true);
+    if (assignmentShow == null){
+        res.json([]);
+    }
+    for(let i = 0; i<assignmentShow.length; i++){
+        listShow.push(assignmentShow[i].id)
+    }
+    console.log("Day la list showgrade: ", listShow)
+    res.json(listShow);
 });
 
 module.exports = router;

@@ -19,6 +19,11 @@ module.exports = {
         return items.length > 0? items[0]: null;
     },
 
+    async assignmentShowGrade(idclass, state){
+        const items = await db('assignments').where({id_class:idclass, showgrade: state});
+        return items.length > 0? items: null;
+    },
+
     add(new_assignment){
         return db('assignments').insert(new_assignment);
     },
@@ -63,7 +68,7 @@ module.exports = {
                                         showgrade: state
                                     })
                                     .where({
-                                        id_assignment: idassignment
+                                        id: idassignment
                                     });
     },
 }
