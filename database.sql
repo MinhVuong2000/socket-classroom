@@ -101,7 +101,7 @@ CREATE TABLE assignments (
 INCREMENT 1
 MINVALUE  1
 MAXVALUE 2147483647
-START 4
+START 10
 ),
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "point" int4 NOT NULL,
@@ -122,15 +122,25 @@ CREATE TABLE user_assignments (
 -- Records of assignments
 -- ----------------------------
 BEGIN;
-INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (1, 'Midterm', 100, 1, 0);
-INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (2, 'Midterm', 100, 2, 0);
-INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (3, 'Create Clone Classroom', 10, 1, 3);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (1, 'Midterm', 4, 1, 0, true);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (2, 'Midterm', 5, 2, 0, false);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (3, 'Create Clone Classroom', 2, 3, 1, false);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (4, 'Bai tap 1', 2, 3, 2, false);
+INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (5, 'Bai tap 2', 3, 3, 3, true);
 COMMIT;
 
 -- ----------------------------
--- Checks structure for table Class_User
+-- Records of assignments
 -- ----------------------------
-ALTER TABLE class_user ADD CONSTRAINT "VALID_MARK" CHECK (mark >= 0 AND mark <= 10);
+BEGIN;
+INSERT INTO user_assignments OVERRIDING SYSTEM VALUE VALUES (123, 3, 3, 8);
+INSERT INTO user_assignments OVERRIDING SYSTEM VALUE VALUES (321, 3, 3, 7);
+INSERT INTO user_assignments OVERRIDING SYSTEM VALUE VALUES (123, 4, 3, 4);
+INSERT INTO user_assignments OVERRIDING SYSTEM VALUE VALUES (123, 5, 3, 6);
+INSERT INTO user_assignments OVERRIDING SYSTEM VALUE VALUES (321, 4, 3, 7);
+INSERT INTO user_assignments OVERRIDING SYSTEM VALUE VALUES (321, 5, 3, 9);
+COMMIT;
+
 
 -- ----------------------------
 -- Primary Key structure for table Class_User
