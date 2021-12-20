@@ -65,6 +65,7 @@ module.exports = {
             temp2.name = listStudentGrade[0].assignmentGrade[i].nameAssignment;
             temp2.orders = listStudentGrade[0].assignmentGrade[i].orders;
             temp2.point = listStudentGrade[0].assignmentGrade[i].point;
+            temp2.idAssignment = listStudentGrade[0].assignmentGrade[i].idAssignment;
             templist.push(temp2);
         }
         
