@@ -22,8 +22,12 @@ module.exports = {
             let new_arr = await items.filter(item => item.id_user_uni == userRemove); //new_arr là danh sách các bài tập của user_a
             console.log("Danh sach cac bai tap usera: ", new_arr);
             let temp = {};
-            let userinfo = await db('users').where("id_uni", items[0].id_user_uni);
-            temp.username = userinfo[0].full_name;
+            let userinfo = await db('class_user').where({
+                id_uni_user: items[0].id_user_uni
+            });
+            
+            temp.username = userinfo[0].full_name_user;
+            temp.id_uni_user = userinfo[0].id_uni_user;
             temp.assignmentGrade = [];
             //Xét từng môn học của học sinh a
             for(let i = 0; i < new_arr.length; i++){
@@ -32,6 +36,7 @@ module.exports = {
                 assignTemp.nameAssignment = assignmentinfo[0].name;
                 assignTemp.gradeAssignment = new_arr[i].grade;
                 assignTemp.orders = assignmentinfo[0].orders;
+                assignTemp.idAssignment = assignmentinfo[0].id;
                 assignTemp.point = assignmentinfo[0].point;
                 temp.assignmentGrade.push(assignTemp);
                 if(new_arr[i].grade != null){

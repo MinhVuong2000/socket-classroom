@@ -3,6 +3,8 @@ const router = express.Router();
 const assignments = require('./assignments')
 const classes_db = require('../../../models/classes')
 const class_user_db = require('../../../models/class_user')
+const assignments_db = require('../../../models/assignments')
+const user_assignment_db = require('../../../models/user_assignments')
 const authMiddleWare = require('../../../middlewares/auth_middleware.mdw')
 
 
@@ -23,12 +25,13 @@ router.post('/add-students', async (req, res) => {
         new_students_list[i].is_teacher = false;
     }
     await class_user_db.add(new_students_list);
+    console.log("List student trong import excel: ", new_students_list)
     //TODO: When new user add to class, thêm điểm trong User_Assignment là null
     let listAssignment = await assignments_db.allInClass(id_class);
     for(i = 0; i< listAssignment.length; i++){
         for(j = 0; j<new_students_list.length; j++){
             let tempUserAssignment = {
-                id_user_uni: new_students_list[j].id_uni,
+                id_user_uni: new_students_list[j].id_uni_user,
                 id_assignment: listAssignment[i].id,
                 id_class: id_class,
                 grade: null
