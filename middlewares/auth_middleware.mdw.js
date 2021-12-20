@@ -24,8 +24,14 @@ let isAuthor = async (req, res, next) => {
 }
 
 let isAuthen = async (req, res, next) => {
-    const idclass = parseInt(req.params.id);
-    console.log(req.jwtDecoded.data.id_uni);
+    let idclass;
+    if(req.params.id != null){
+        idclass = parseInt(req.params.id);
+    }
+    else{
+        idclass = req.body.id_class;
+    }
+    console.log("check authen idclass: ", idclass);
     const isExistUserOnClass = await class_user_db.checkIsExistUserOnClass(idclass, req.jwtDecoded.data.id_uni)
     if (isExistUserOnClass==false){
         console.log('error 403 isAuthen')

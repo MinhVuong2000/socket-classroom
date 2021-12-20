@@ -127,11 +127,35 @@ router.post('/addgradeassignment', authMiddleWare.isTeacherinClass, async functi
     const updated_user_grade = await user_assignment_db.findAllScoreByIDAssignment(id_assignment);
     res.json(updated_user_grade);
 });
-router.post('/getgradeboard', authMiddleWare.isTeacherinClass, async function(req, res){
+router.post('/getgradeboard', authMiddleWare.isAuthen, async function(req, res){
     const id_class = req.body.id_class;
+    //TODO: Check is teacher in class
+    let isTeacher = await class_user_db.isTeacherinClass(id_class, req.jwtDecoded.data.id_uni);
     console.log(req.body);
     let structure = [];
-    structure = await user_assignment_db.findAllScoreByClassID(id_class);
+    if(isTeacher){
+        structure = await user_assignment_db.findAllScoreByClassID(id_class);
+    }
+    else{
+        //TODO: lấy danh sách bài tập có trong lớp
+        let listassignment = await assignments_db.allInClass(id_class);
+        console.log(" check hoc sinh ne: ", listassignment);
+        //TODO: Duyệt từng bài tập và kiếm điểm của sinh viên, nếu showgrade = false thì gán grade = "Chưa có điểm"
+        for(i = 0; i<listassignment.length; i++){
+            
+            let temp = {};
+            temp.nameAssignment  = listassignment[i].name;
+            if(listassignment[i].showgrade){
+                let stuGradeAssi = await user_assignment_db.find1ScoreByIDAssignmentUser(listassignment[i].id, req.jwtDecoded.data.id_uni);
+                temp.gradeAssignment = stuGradeAssi.grade;
+            }
+            else{
+                temp.gradeAssignment = "Chưa có điểm";
+            }
+            structure.push(temp);
+        }
+    }
+    console.log("Structure: ", structure);
     res.json(structure);
 });
 
