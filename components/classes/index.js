@@ -12,14 +12,11 @@ const BASEURL = 'http://localhost:3001/classes/inviteclass/'
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-    if(req.jwtDecoded){
-        //console.log(req.jwtDecoded.data.id);
-        const allData = await classed_db.all(req.jwtDecoded.data.id_uni);
-        res.json(allData);
-    }
-    else{
+    console.log(req.jwtDecoded.data);
+    if (req.jwtDecoded.data.id_uni === '')
         return res.json(null);
-    }
+    const allData = await classed_db.all(req.jwtDecoded.data.id_uni);
+    res.json(allData);
 });
 
 router.post('/', async function(req, res, next){

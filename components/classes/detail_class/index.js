@@ -9,7 +9,7 @@ const authMiddleWare = require('../../../middlewares/auth_middleware.mdw')
 
 
 router.get('/', async function(req, res) {
-    console.log("Vao cai detail class ne",req.jwtDecoded.data.id_uni )
+    console.log("Vao cai detail class ne",req.jwtDecoded.data.id_uni)
     const item = await classes_db.one(req.id_class, req.jwtDecoded.data.id_uni);
     console.log(item);
     res.json(item);
