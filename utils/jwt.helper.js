@@ -5,12 +5,6 @@ let generateToken = (user, secretSignature, tokenLife, loggedBySocial) => {
     // Định nghĩa những thông tin của user
     const userData = {
       id: user.id,
-      username: user.username,
-      full_name: user.full_name,
-      id_uni: user.id_uni,
-      email: user.email,
-      address: user.address,
-      phone: user.phone,
       is_social_login: loggedBySocial,
     }
     // Thực hiện ký và tạo token

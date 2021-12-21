@@ -2,6 +2,7 @@ const jwtHelper = require("../utils/jwt.helper");
 const class_user_db = require('../models/class_user')
 const classes_db = require('../models/classes')
 const assignments_db = require('../models/assignments')
+const users_db = require('../models/users')
  
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
@@ -12,9 +13,12 @@ let isAuthor = async (req, res, next) => {
     if (tokenFromClient) {
         try {
             const decoded = await jwtHelper.verifyToken(tokenFromClient, accessTokenSecret);
-            req.jwtDecoded = decoded;
+            req.jwtDecoded = {};
+            req.jwtDecoded.data = await users_db.one(decoded.data.id);
+            req.jwtDecoded.data.is_social_login = decoded.data.is_social_login;
             next();
         } catch (error) {
+            console.log(error)
             return res.status(400).json('400');
         }
     } else {

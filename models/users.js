@@ -11,9 +11,13 @@ module.exports = {
             return null;
         if (!is_detail){
             let item = {};
+            item.id = items[0].id;
             item.full_name = items[0].full_name;
             item.username = items[0].username;
             item.id_uni = items[0].id_uni;
+            item.email = items[0].email;
+            item.address = items[0].address;
+            item.phone = items[0].phone;
             return item;
         }
         return items[0];
