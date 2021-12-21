@@ -23,7 +23,8 @@ module.exports = {
             console.log("Danh sach cac bai tap usera: ", new_arr);
             let temp = {};
             let userinfo = await db('class_user').where({
-                id_uni_user: items[0].id_user_uni
+                id_uni_user: items[0].id_user_uni,
+                id_class: idclass
             });
             
             temp.username = userinfo[0].full_name_user;
