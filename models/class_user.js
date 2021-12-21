@@ -24,7 +24,6 @@ module.exports = {
                 items[i] = await user_db.oneIDUni(items[i].id_uni_user);
             }
         }
-        console.log(items);
         return items;
     },
     async addUserToClass(classID, userid){
@@ -40,7 +39,6 @@ module.exports = {
             id_class: classid,
             id_uni_user: userid
         })
-        console.log('Is exit on class', item);
         if(item.length==0){
             return false;
         }
@@ -53,7 +51,6 @@ module.exports = {
             'id_class': id_class,
             'is_teacher': true,
         });
-        console.log(items);
         return items.length==0? false: true;
     },
     async allStudentInClass(id_class){

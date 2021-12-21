@@ -20,7 +20,7 @@ module.exports = {
             let structure = 0;
             let userRemove = items[0].id_user_uni;
             let new_arr = await items.filter(item => item.id_user_uni == userRemove); //new_arr là danh sách các bài tập của user_a
-            console.log("Danh sach cac bai tap usera: ", new_arr);
+            
             let temp = {};
             let userinfo = await db('class_user').where({
                 id_uni_user: items[0].id_user_uni,

@@ -43,7 +43,6 @@ module.exports = {
         const items = await db('assignments')
                 .orderBy('orders', 'desc')
                 .where('id_class', '=', id_class)
-        console.log("findmaxorder: ",items[0]);
         return items.length > 0? items[0]: false;
     },
     async updateOrderByIdAssignment(idassign,  neworder){

@@ -18,7 +18,6 @@ module.exports = {
             }
             listitems.push(items[0]);
         }
-        console.log(listitems);
         return listitems;
     },
 
@@ -28,7 +27,7 @@ module.exports = {
             'id_uni_user': id_uni,
             'id_class': idclass
         });
-        console.log("Class user item",class_user_item);
+        //console.log("Class user item",class_user_item);
         if (class_user_item.length==0){
             return {message: 'not enroll class'};
         }
@@ -37,14 +36,13 @@ module.exports = {
             return {message: 'not enroll class'};
         }
         item = item[0];
-        console.log("item trong cai one của class ne: ", item)
+        //console.log("item trong cai one của class ne: ", item)
         item.admin_info = await user_db.one(item.id_admin);
-        console.log("Admin info ne: ", item);
+        //console.log("Admin info ne: ", item);
         item.list_teacher = await class_user_db.roleByClass(idclass,true);
-        console.log("List teacher ne: ", item);
         item.list_student = await class_user_db.roleByClass(idclass,false);
         item.isTeacher = class_user_item[0].is_teacher;
-        console.log(item);
+        console.log("data get derail 1 class infor on classes db",item);
         return item;
     },
 
@@ -54,7 +52,6 @@ module.exports = {
             return null;
         }
         item = item[0];
-        console.log(item);
         let ID = item.id;
         item.admin_info = await user_db.one(item.id_admin);
         item.list_teacher = await class_user_db.roleByClass(ID,true)
@@ -62,11 +59,7 @@ module.exports = {
         return item;
     },
     async findIDClassByLink(link){
-        console.log("inside findIDClassByLink");
         let item = await db('classes').where('invitation_link', link);
-        // console.log("typeof item:" + typeof item);
-        // console.log("item 0:" + item[0]);
-        //console.log("found ID: " + item[0].id);
         if (item.length==0){
             return null;
         }
@@ -101,7 +94,6 @@ module.exports = {
             'id_admin': id_user,
             'id': id_class
         });
-        console.log(items);
         return items.length==0? false: true;
     },
 
