@@ -7,8 +7,8 @@ const class_user_db = require('../../models/class_user');
 const assignments_db = require('../../models/assignments');
 const user_assignment_db = require('../../models/user_assignments');
 const detail_class = require('./detail_class')
-const BASEURL = 'http://localhost:3001/classes/inviteclass/'
-// const BASEURL = 'https://classroom-assigment-fe.herokuapp.com/classes/inviteclass/'
+// const BASEURL = 'http://localhost:3001/classes/inviteclass/'
+const BASEURL = 'https://classroom-grade-manager-fe.herokuapp.com/classes/inviteclass/'
 
 function randomString(n) {
     var text = "";
