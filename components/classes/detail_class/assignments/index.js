@@ -171,8 +171,9 @@ router.post('/getlistshowgrade', authMiddleWare.isAuthen, async function(req, re
     const id_class = req.body.id_class;
     let listShow = [];
     let assignmentShow = await assignments_db.assignmentShowGrade(id_class, true);
+    console.log(`ket qua trong get list showgrade`, assignmentShow);
     if (assignmentShow == null){
-        res.json([]);
+        return res.json([]);
     }
     for(let i = 0; i<assignmentShow.length; i++){
         listShow.push(assignmentShow[i].id)

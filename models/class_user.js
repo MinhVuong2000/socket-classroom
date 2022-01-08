@@ -26,12 +26,22 @@ module.exports = {
         }
         return items;
     },
-    async addUserToClass(classID, userid){
+    async addUserToClass(classID, userid, full_name){
         console.log("add useer");
         await db('class_user').insert({
             id_class: classID,
             id_uni_user: userid,
+            full_name_user: full_name,
             is_teacher: false
+        })
+    },
+    async addTeacherToClass(classID, userid, full_name){
+        console.log("add useer");
+        await db('class_user').insert({
+            id_class: classID,
+            id_uni_user: userid,
+            full_name_user: full_name,
+            is_teacher: true
         })
     },
     async checkIsExistUserOnClass(classid, userid){

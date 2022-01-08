@@ -67,6 +67,15 @@ module.exports = {
         return item[0].id;
     },
 
+    async findCodeClassByLink(link){
+        let item = await db('classes').where('invitation_link', link);
+        if (item.length==0){
+            return null;
+        }
+        
+        return item[0].code;
+    },
+
     async isExisted(className){
         const item = await db('classes').where(db.raw('LOWER("class_name") = ?', className.toLowerCase()));
         return item.length>0 ? true : false;
@@ -99,5 +108,19 @@ module.exports = {
 
     async del(id){
         await db('classes').where('id', id).del();
+    },
+    async checkCodeClassExist(code){
+        let item = await db('classes').where('code', code);
+        if (item.length==0){
+            return false;
+        }
+        return true;
+    },
+    async findClassByCode(code){
+        let item = await db('classes').where('code', code);
+        if (item.length==0){
+            return false;
+        }
+        return item[0].id;
     }
 }
