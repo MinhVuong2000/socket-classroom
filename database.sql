@@ -1,12 +1,8 @@
--- Database: new_classroom
 
--- DROP DATABASE IF EXISTS new_classroom;
-
-
--- Database: classroom
-
---DROP DATABASE IF EXISTS classroom;
 DROP TABLE IF EXISTS user_assignments;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS notifications;
+DROP TABLE IF EXISTS review_grade;
 DROP TABLE IF EXISTS assignments;
 DROP TABLE IF EXISTS class_user;
 CREATE TABLE class_user (
@@ -47,7 +43,8 @@ START 6
   "class_name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "description" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "id_admin" int4 NOT NULL,
-  "invitation_link" varchar(255) COLLATE "pg_catalog"."default"
+  "invitation_link" varchar(255) COLLATE "pg_catalog"."default",
+  "code" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
 
@@ -55,9 +52,9 @@ START 6
 -- Records of Classes
 -- ----------------------------
 BEGIN;
-INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (1, 'PTUDW', 'Môn học cơ bản về back end', 2, NULL);
-INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (2, 'PTUDWNC', 'Học cách phát triển front end', 3, NULL);
-INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (3, 'PTUDDD', 'Xây dựng ứng dụng cho thiết bị di động', 4, NULL);
+INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (1, 'PTUDW', 'Môn học cơ bản về back end', 2, 'PTUDW','abcdef');
+INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (2, 'PTUDWNC', 'Học cách phát triển front end', 3,'PTUDWNC', 'ghiklm');
+INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (3, 'PTUDDD', 'Xây dựng ứng dụng cho thiết bị di động', 4, 'PTUDDD', 'nopqrs');
 COMMIT;
 
 -- ----------------------------
@@ -78,6 +75,27 @@ START 5
   "address" varchar(255),
   "email" varchar(255),
   "phone" varchar(50),
+	"otp" int4
+)
+;
+
+-- ----------------------------
+-- Table structure for Admin
+-- ----------------------------
+DROP TABLE IF EXISTS admins;
+CREATE TABLE admins (
+  "id" int4 NOT NULL GENERATED ALWAYS AS IDENTITY (
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 2147483647
+START 5
+),
+  "full_name" varchar(255),
+  "username" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+  "password" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
+  "is_supper" varchar(50) COLLATE "pg_catalog"."default",
+  "email" varchar(255),
+  "create_time" timestamp,
 	"otp" int4
 )
 ;
@@ -130,7 +148,7 @@ INSERT INTO assignments OVERRIDING SYSTEM VALUE VALUES (5, 'Bai tap 2', 3, 3, 3,
 COMMIT;
 
 -- ----------------------------
--- Records of assignments
+-- Records of user_assignments
 -- ----------------------------
 BEGIN;
 INSERT INTO user_assignments OVERRIDING SYSTEM VALUE VALUES (123, 3, 3, 8);
@@ -142,6 +160,53 @@ INSERT INTO user_assignments OVERRIDING SYSTEM VALUE VALUES (321, 5, 3, 9);
 COMMIT;
 
 
+CREATE TABLE review_grade (
+  "id" int4 NOT NULL GENERATED ALWAYS AS IDENTITY (
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 2147483647
+START 10
+),
+  "id_user_uni" int4 NOT NULL,
+  "id_assignment" int4 NOT NULL,
+  "id_class" int4 NOT NULL,
+  "current_grade" int4,
+  "expect_grade" int4,
+  "explain" varchar(255),
+  "create_time" timestamp,
+	"status" int4
+)
+;
+
+CREATE TABLE comments (
+  "id" int4 NOT NULL GENERATED ALWAYS AS IDENTITY (
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 2147483647
+START 10
+),
+  "id_user_uni" int4 NOT NULL,
+  "id_teacher" int4 NOT NULL,
+  "id_review" int4 NOT NULL,
+  "content" varchar(255),
+  "create_time" timestamp
+)
+;
+
+CREATE TABLE notifications (
+  "id" int4 NOT NULL GENERATED ALWAYS AS IDENTITY (
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 2147483647
+START 10
+),
+  "id_user_uni" int4 NOT NULL,
+  "id_class" int4 NOT NULL,
+  "message" varchar(255),
+  "create_time" timestamp,
+	"status" int4
+)
+;
 -- ----------------------------
 -- Primary Key structure for table Class_User
 -- ----------------------------
@@ -166,6 +231,11 @@ ALTER TABLE users ADD CONSTRAINT "USERNAME" UNIQUE ("username");
 -- Primary Key structure for table Users
 -- ----------------------------
 ALTER TABLE users ADD CONSTRAINT "Users_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table Admins
+-- ----------------------------
+ALTER TABLE admins ADD CONSTRAINT "admins_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Foreign Keys structure for table Class_User
@@ -193,8 +263,42 @@ ALTER TABLE assignments ADD CONSTRAINT "ID_CLASS_ASSIGNMENT" FOREIGN KEY ("id_cl
 ALTER TABLE user_assignments ADD CONSTRAINT "user_assignments_pkey" PRIMARY KEY ("id_user_uni", "id_assignment", "id_class");
 
 -- ----------------------------
--- Foreign Keys structure for table assignments
+-- Foreign Keys structure for table user_assignments
 -- ----------------------------
 ALTER TABLE user_assignments ADD CONSTRAINT "ID_UserAssigments_ASSIGNMENT" FOREIGN KEY ("id_assignment") REFERENCES assignments ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE user_assignments ADD CONSTRAINT "ID_UserAssigments_Class" FOREIGN KEY ("id_class") REFERENCES classes ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 --ALTER TABLE user_assignments ADD CONSTRAINT "ID_UserAssigments_User" FOREIGN KEY ("id_user_uni") REFERENCES users ("id_uni") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- ----------------------------
+-- Primary Key structure for table review_grade
+-- ----------------------------
+ALTER TABLE review_grade ADD CONSTRAINT "review_grade_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table review_grade
+-- ----------------------------
+ALTER TABLE review_grade ADD CONSTRAINT "ID_reviewgrade_assignment" FOREIGN KEY ("id_assignment") REFERENCES assignments ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE review_grade ADD CONSTRAINT "ID_reviewgrade_class" FOREIGN KEY ("id_class") REFERENCES classes ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+--ALTER TABLE review_grade ADD CONSTRAINT "ID_reviewgrade_user" FOREIGN KEY ("id_user_uni") REFERENCES users ("id_uni") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- ----------------------------
+-- Primary Key structure for table review_grade
+-- ----------------------------
+ALTER TABLE comments ADD CONSTRAINT "comment_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table review_grade
+-- ----------------------------
+ALTER TABLE comments ADD CONSTRAINT "ID_comment_reviewgrade" FOREIGN KEY ("id_review") REFERENCES review_grade ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+--ALTER TABLE comments ADD CONSTRAINT "ID_comment_user" FOREIGN KEY ("id_user_uni") REFERENCES users ("id_uni") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- ----------------------------
+-- Primary Key structure for table review_grade
+-- ----------------------------
+ALTER TABLE notifications ADD CONSTRAINT "notifications_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table review_grade
+-- ----------------------------
+ALTER TABLE notifications ADD CONSTRAINT "ID_reviewgrade_class" FOREIGN KEY ("id_class") REFERENCES classes ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+--ALTER TABLE notifications ADD CONSTRAINT "ID_reviewgrade_user" FOREIGN KEY ("id_user_uni") REFERENCES users ("id_uni") ON DELETE CASCADE ON UPDATE CASCADE;
