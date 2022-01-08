@@ -10,9 +10,6 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
 exports.register = async function(req, res) {
     //Get infor from form at FE (username/password/email/phone/mssv/fullname/address)
-    
-    console.log(req.body);
-    
     const hash = bcrypt.hashSync(req.body.password, 10);
 
     const user = {
@@ -81,14 +78,6 @@ exports.is_available = async (req, res)=>{
     return res.json(true);
 }
 
-exports.is_available_email = async (req, res)=>{
-    const email = req.query.email;
-    const rowsUser = await user_db.findUserByEmail(email);
-    if (rowsUser === null)  
-        return res.json(true);
-    return res.json(false);
-}
-
 exports.is_available_mssv = async (req, res)=>{
     const mssv = req.query.mssv;
     const rowsUser = await user_db.checkAvailableMSSV(mssv);
@@ -97,9 +86,16 @@ exports.is_available_mssv = async (req, res)=>{
     return res.json(false);
 }
 
+exports.is_available_email = async (req, res)=>{
+    const email = req.query.email;
+    const rowsUser = await user_db.findUserByEmail(email);
+    if (rowsUser === null)  
+        return res.json(true);
+    return res.json(false);
+}
+
 exports.is_exist_email = async (req, res)=>{
     const email = req.query.email;
-    console.log(email);
     const rowUsers = await reader.findUserByEmail(email);
     if (rowUsers === null) 
         return res.json(false);
@@ -107,8 +103,64 @@ exports.is_exist_email = async (req, res)=>{
     
 }
 
+exports.get_otp = async (req, res) => {
+    const email = req.body.email;
+    const rowsUser = await user_db.findUserByEmail(email);
+    if (rowsUser === null)  
+        return res.json(false);
+    // send otp to email
+    let otp = Math.random();
+    otp = otp * 1000000;
+    otp = parseInt(otp);
+    await user_db.updateOTP(email, otp);
+    let transporter = nodemailer.createTransport(
+        {
+            service: 'gmail',
+            auth: {
+                user: 'newspaper.vuonghieutrinh@gmail.com',
+                pass: 'vuonghieutrinh'
+            },
+    });
+    
+    var mailOptions={
+        from: "newspaper.vuonghieutrinh@gmail.com",
+        to: email,
+        subject: "OTP cho việc đặt lại mật khẩu: ",
+        html: `<p>Chào bạn,${email}</p>`+
+        "<h3>Hãy nhập OTP bên dưới để thiết lập lại mật khẩu </h3>"  + 
+        "<h1 style='font-weight:bold;'>" + otp +"</h1>" +
+        "<p>Cảm ơn</p>",
+    };
+    
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);   
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    });
+    return res.json(true);
+}
+
+exports.check_otp = async (req, res) => {
+    const email = req.body.email;
+    const otp = req.body.otp;
+    console.log("check otp:", req.body);
+    const row_user = await user_db.findUserByEmail(email);
+    if (row_user === null || row_user.otp != otp)
+        return res.json(false);
+    await user_db.updateOTP(email, -1);
+    return res.json(true);
+}
+
+exports.change_password = async (req, res) => {
+    const hash = bcrypt.hashSync(req.body.password, 10);
+    const email = req.body.email;
+    await user_db.updatePassword(email, hash);
+    return res.json(true);
+}
+
 exports.signin = async (req, res) => {
-    console.log("signin:", req.body)
     const row_user = await user_db.findUserByUsername(req.body.username);
     if (row_user != null) {
         return checkPassword(row_user, req, res);

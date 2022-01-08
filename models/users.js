@@ -131,5 +131,13 @@ module.exports = {
 
     updateProfile(id, updated_profile){
         return db('users').where('id', id).update(updated_profile);
+    },
+
+    updateOTP(email, OTP){
+        return db('users').where('email', email).update({'otp': OTP});
+    },
+
+    updatePassword(email, password){
+        return db('users').where('email', email).update({'password': password});
     }
 }
