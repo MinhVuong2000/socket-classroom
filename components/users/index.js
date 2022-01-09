@@ -10,6 +10,16 @@ router.get('/profile', async function(req, res) {
     return res.json(profile);
 });
 
+router.post('/check-password', async function (req, res){
+    user_id = req.jwtDecoded.data.id;
+    const user = await user_db.one(user_id, true);
+    console.log("user", user);
+    const password = req.body.password;
+    console.log("password", password);
+    const ret = bcrypt.compareSync(password, user.password);
+    return res.json(ret);
+});
+
 router.patch('/update-profile', async function(req, res) {
     updated_profile = req.body.updated_profile;
     console.log("Update profile:", updated_profile);
