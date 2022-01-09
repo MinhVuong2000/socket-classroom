@@ -4,6 +4,10 @@ const class_user_db = require('./class_user')
 const class_user = require('./class_user')
 
 module.exports = {
+    allOfAll(){
+        return db('classes');
+    },
+
     async all(iduser){
         let listclass_user = await db('class_user').where('id_uni_user', iduser);
         if(listclass_user.length == 0){

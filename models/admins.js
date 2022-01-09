@@ -25,7 +25,7 @@ module.exports = {
         return items[0];
     },
 
-    add(new_addmin){
-        return db('admins').insert(new_addmin);
+    add(new_admin){
+        return db('admins').insert(new_admin);
     }
 }

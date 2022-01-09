@@ -9,6 +9,7 @@ require('dotenv').config();
 var authen_author = require('./components/authen_author'); 
 var usersRouter = require('./components/users');
 var classesRouter = require('./components/classes');
+var adminsRouter = require('./components/admins');
 const AuthMiddleWare = require("./middlewares/auth_middleware.mdw");
 
 var app = express();
@@ -29,6 +30,7 @@ app.use('/', authen_author);
 app.use(AuthMiddleWare.isAuthor);
 app.use('/users', usersRouter);
 app.use('/classes', classesRouter);
+app.use('/admins', AuthMiddleWare.isAdmin, adminsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
