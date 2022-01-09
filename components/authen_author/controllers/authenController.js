@@ -3,6 +3,7 @@ const user_db = require('../../../models/users');
 const class_user_db = require('../../../models/class_user')
 const bcrypt = require('bcryptjs');
 const jwtHelper = require("../../../utils/jwt.helper");
+const nodemailer = require('nodemailer');
 
 const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
@@ -24,33 +25,7 @@ exports.register = async function(req, res) {
     }
 
     let flag = await user_db.addNewUser(user);
-    console.log("add user", flag);
     if (flag){
-        /*let transporter = nodemailer.createTransport(
-            {
-                service: 'gmail',
-                auth: {
-                    user: 'classroom.webnangcao@gmail.com',
-                    pass: 'thangtrinhvuong'
-                },
-        });
-        
-        var mailOptions={
-            from: "classroom.webnangcao@gmail.com",
-            to: req.body.email,
-            subject: "Notice create account successfully",
-            html: `<p>Dear you,${req.body.email}</p>`+
-            "<h3>This is a email to notice create account successfully </h3>"  + 
-            "<p>Thank you</p>",
-        };
-         
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                return console.log(error);
-            }
-            console.log('Message sent: %s', info.messageId);   
-            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        });*/
         return res.json(true);
     }
     return res.json(false);
@@ -112,20 +87,21 @@ exports.get_otp = async (req, res) => {
     let otp = Math.random();
     otp = otp * 1000000;
     otp = parseInt(otp);
+    console.log("email, otp to sendOTP:", email, otp);
     await user_db.updateOTP(email, otp);
     let transporter = nodemailer.createTransport(
         {
             service: 'gmail',
             auth: {
                 user: 'newspaper.vuonghieutrinh@gmail.com',
-                pass: 'vuonghieutrinh'
+                pass: 'vuongthangtrinh'
             },
     });
     
     var mailOptions={
         from: "newspaper.vuonghieutrinh@gmail.com",
         to: email,
-        subject: "OTP cho việc đặt lại mật khẩu: ",
+        subject: "Classroom Clone: Mã OTP cho việc đặt lại mật khẩu",
         html: `<p>Chào bạn,${email}</p>`+
         "<h3>Hãy nhập OTP bên dưới để thiết lập lại mật khẩu </h3>"  + 
         "<h1 style='font-weight:bold;'>" + otp +"</h1>" +
@@ -136,6 +112,9 @@ exports.get_otp = async (req, res) => {
         if (error) {
             return console.log(error);
         }
+        else{
+            console.log('mail sent');
+         } 
         console.log('Message sent: %s', info.messageId);   
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
     });
