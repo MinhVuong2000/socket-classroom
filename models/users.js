@@ -124,6 +124,10 @@ module.exports = {
             return null;
         return items[0];
     },
+
+    lockAccount(id){
+        return db('users').where('id', id).update('status', 0);
+    },
     
     addNewUser(new_user){
         return db('users').insert(new_user);

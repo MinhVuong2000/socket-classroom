@@ -93,7 +93,7 @@ START 5
   "full_name" varchar(255),
   "username" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "password" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
-  "is_supper" varchar(50) COLLATE "pg_catalog"."default",
+  "is_super" varchar(50) COLLATE "pg_catalog"."default",
   "email" varchar(255),
   "create_time" timestamp,
 	"otp" int4

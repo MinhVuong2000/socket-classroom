@@ -3,6 +3,7 @@ const class_user_db = require('../models/class_user')
 const classes_db = require('../models/classes')
 const assignments_db = require('../models/assignments')
 const users_db = require('../models/users')
+const admins_db = require('../models/admins')
  
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
@@ -78,10 +79,28 @@ let isAssignmentinClass = async (req, res, next) => {
     next();
 }
 
+let isAdmin = async (req, res, next) => {
+    const id = req.jwtDecoded.data.id;
+    const admin = await admins_db.one(id);
+    if (admin===null)
+        return res.status(403).json('403');
+    next();
+}
+
+let isSuperAdmin = async (req, res, next) => {
+    const id = req.jwtDecoded.data.id;
+    const admin = await admins_db.one(id);
+    if (admin===null || admin.is_super===false)
+        return res.status(403).json('403');
+    next();
+}
+
 module.exports = {
     isAuthor: isAuthor,
     isAuthen: isAuthen,
     isOwnerClass: isOwnerClass,
     isTeacherinClass: isTeacherinClass,
-    isAssignmentinClass: isAssignmentinClass
+    isAssignmentinClass: isAssignmentinClass,
+    isAdmin: isAdmin,
+    isSuperAdmin: isSuperAdmin,
 };
