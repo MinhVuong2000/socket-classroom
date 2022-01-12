@@ -7,7 +7,7 @@ const user_assignment_db = require('../../../../models/user_assignments');
 const class_user_db = require('../../../../models/class_user');
 //url: /detail/:id/assigments
 
-router.get('/', async function(req, res, next) {
+router.get('/', async function(req, res) {
     //show list assignments
     //name, point
     const id_class = req.id_class;

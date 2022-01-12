@@ -7,7 +7,7 @@ module.exports = {
         return db('admins');
     },
 
-    one(id, is_detail=false){
+    async one(id, is_detail=false){
         let items = await db('admins').where('id', id);
         if (items.length==0)
             return null;

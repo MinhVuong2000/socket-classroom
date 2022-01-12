@@ -1,10 +1,11 @@
+const express = require('express');
 const router = express.Router();
 const AuthMiddleWare = require('../../middlewares/auth_middleware.mdw');
 
 const admins_db = require('../../models/admins');
-const manage_admins = require('./manage_admins/index')
-const manage_users = require('./manage_users/index')
-const manage_classes = require('./manage_classes/index')
+const manage_admins = require('./manage_admins')
+const manage_users = require('./manage_users')
+const manage_classes = require('./manage_classes')
 
 router.get('/', async function(req, res){
     const id = req.jwtDecoded.data.id;
@@ -12,8 +13,10 @@ router.get('/', async function(req, res){
     return res.json(profile);
 });
 
-router.post('/manage-admins', AuthMiddleWare.isSuperAdmin, manage_admins);
-router.post('/manage-users', manage_users);
-router.post('/manage-classes', manage_classes);
+router.use('/manage-admins', AuthMiddleWare.isSuperAdmin, manage_admins);
+router.use('/manage-users', manage_users);
+router.use('/manage-classes', manage_classes);
+
+module.exports = router;
 
 
