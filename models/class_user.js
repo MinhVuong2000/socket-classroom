@@ -17,6 +17,14 @@ module.exports = {
         }).update('full_name_user', full_name_user)
     },
 
+    async findNameByUserIDClass(id_class, id_uni){
+        let items = await db('class_user').where({id_class:id_class,id_uni_user:id_uni})
+        if(items.length > 0){
+            return items[0].full_name_user;
+        }
+        return null;
+    },
+
     async roleByClass(classID, is_teacher){
         let items = await db('class_user').where({id_class:classID,is_teacher:is_teacher})
         if (is_teacher){

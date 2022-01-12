@@ -186,7 +186,6 @@ MAXVALUE 2147483647
 START 10
 ),
   "id_user_uni" int4 NOT NULL,
-  "id_teacher" int4 NOT NULL,
   "id_review" int4 NOT NULL,
   "content" varchar(255),
   "create_time" timestamp

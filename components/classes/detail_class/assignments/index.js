@@ -5,6 +5,8 @@ const { updateOrderByIdAssignment, assignmentShowGrade } = require('../../../../
 const assignments_db = require('../../../../models/assignments')
 const user_assignment_db = require('../../../../models/user_assignments');
 const class_user_db = require('../../../../models/class_user');
+const review_db = require('../../../../models/review_grade');
+const comment_db = require('../../../../models/comments');
 //url: /detail/:id/assigments
 
 router.get('/', async function(req, res) {
@@ -153,12 +155,30 @@ router.post('/getgradeboard', authMiddleWare.isAuthen, async function(req, res){
             
             let temp = {};
             temp.nameAssignment  = listassignment[i].name;
+            temp.idAssignment  = listassignment[i].id;
             if(listassignment[i].showgrade){
                 let stuGradeAssi = await user_assignment_db.find1ScoreByIDAssignmentUser(listassignment[i].id, req.jwtDecoded.data.id_uni);
+                let review = await review_db.getStatus(listassignment[i].id, req.jwtDecoded.data.id_uni);
+                if(review == null){
+                    temp.contentReview = 'Phúc khảo';
+                    temp.enableReview = true;
+                }
+                else{
+                    if(review.status == -1){
+                        temp.contentReview = 'Đang xử lý';
+                        temp.enableReview = true;
+                    }
+                    else{
+                        temp.contentReview = 'Đã xử lý';
+                        temp.enableReview = true;
+                    }
+                }
                 temp.gradeAssignment = stuGradeAssi.grade;
             }
             else{
                 temp.gradeAssignment = "Chưa có điểm";
+                temp.contentReview = 'Phúc khảo';
+                temp.enableReview = false;
             }
             structure.push(temp);
         }
@@ -171,7 +191,6 @@ router.post('/getlistshowgrade', authMiddleWare.isAuthen, async function(req, re
     const id_class = req.body.id_class;
     let listShow = [];
     let assignmentShow = await assignments_db.assignmentShowGrade(id_class, true);
-    console.log(`ket qua trong get list showgrade`, assignmentShow);
     if (assignmentShow == null){
         return res.json([]);
     }
@@ -181,8 +200,82 @@ router.post('/getlistshowgrade', authMiddleWare.isAuthen, async function(req, re
     res.json(listShow);
 });
 
+router.post('/getlistcomment', async function(req, res){
+    const id_class = req.body.id_class;
+    const id_assignment = req.body.id_assignment;
+    const id_uni = req.jwtDecoded.data.id_uni;
+    let review = await review_db.findReviewByUserAssignment(id_uni, id_assignment);
+    if (review == null){
+        return res.json([]);
+    }
+    let listComment = await comment_db.commentsByReviewID(review.review.id);
+    res.json(listComment);
+});
+router.post('/getdetailreview', async function(req, res){
+    const id_class = req.body.id_class;
+    const id_assignment = req.body.id_assignment;
+    const id_uni = req.jwtDecoded.data.id_uni;
+    let review = await review_db.findReviewByUserAssignment(id_uni, id_assignment);
+    if (review == null){
+        return res.json([]);
+    }
+    res.json(review);
+});
+
+router.post('/getgradeafter', async function(req, res){
+    const id_class = req.body.id_class;
+    const id_assignment = req.body.id_assignment;
+    const id_uni = req.jwtDecoded.data.id_uni;
+    let grade = await review_db.findReviewGradeByUserAssignment(id_uni, id_assignment);
+    if (grade == null){
+        return res.json(null);
+    }
+    res.json(grade);
+});
+
+router.post('/addreview', async function(req, res){
+    const id_class = req.body.id_class;
+    const id_assignment = req.body.id_assignment;
+    const id_uni = req.jwtDecoded.data.id_uni;
+    const addReview = {
+        id_user_uni: id_uni,
+        id_assignment: id_assignment,
+        id_class: id_class,
+        current_grade: req.body.current,
+        expect_grade: req.body.expect,
+        explain: req.body.explain,
+        create_time: new Date().toISOString(),
+        status: -1
+    }
+    await review_db.add(addReview);
+    console.log("Add review: ", addReview);
+    let review = await review_db.findReviewByUserAssignment(id_uni, id_assignment);
+    if (review == null){
+        return res.json([]);
+    }
+    res.json(review);
+});
+
+router.post('/submitcomment', async function(req, res){
+    const id_class = req.body.id_class;
+    const id_review = req.body.id_review;
+    const id_uni = req.jwtDecoded.data.id_uni;
+    const addComment = {
+        id_user_uni: id_uni,
+        id_review: id_review,
+        content: req.body.contentComment,
+        create_time: new Date().toISOString()
+    }
+    await comment_db.add(addComment);
+    let commentList = await comment_db.commentsByReviewID(id_review);
+    console.log(`List comment by review id:`, commentList);
+    if (commentList == null){
+        return res.json([]);
+    }
+    res.json(commentList);
+});
+
 router.post('/updategradestudent', authMiddleWare.isAuthen, async function(req, res){
-    console.log("req cua update grade student: ", req.body)
     const id_class = req.body.id_class;
     const idUser = req.body.id_uni_user;
     const listUpdate = req.body.update_user_grade;

@@ -15,6 +15,12 @@ router.get('/', async function(req, res) {
     res.json(item);
 });
 
+router.post('/userinfor', async function(req, res) {
+    const item = await class_user_db.findNameByUserIDClass(req.body.id_class, req.jwtDecoded.data.id_uni);
+    console.log("Get full name in class",item);
+    res.json(item);
+});
+
 router.post('/add-students', async (req, res) => {
     // add a new student to class_user, 
     // full name displayed in member list to get full name in table class_user

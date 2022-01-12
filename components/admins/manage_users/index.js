@@ -12,5 +12,8 @@ router.get('/detail/:id', async function(req, res){
     const user = await users_db.one(id_user);
     return res.json(user);
 });
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 module.exports = router;

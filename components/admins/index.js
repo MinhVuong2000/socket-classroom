@@ -19,4 +19,5 @@ router.use('/manage-classes', manage_classes);
 
 module.exports = router;
 
+module.exports = router;
 
