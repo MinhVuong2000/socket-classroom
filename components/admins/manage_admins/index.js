@@ -12,9 +12,5 @@ router.post('/add', async function(req, res){
     await admins_db.add(new_admin);
     return res.json(true);
 });
-<<<<<<< Updated upstream
 
 module.exports = router;
-=======
-module.exports = router;
->>>>>>> Stashed changes

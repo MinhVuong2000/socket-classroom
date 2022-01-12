@@ -12,8 +12,4 @@ router.get('/detail/:id', async function(req, res){
     const _class = await classes_db.one(id_class);
     return res.json(_class);
 });
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 module.exports = router;
