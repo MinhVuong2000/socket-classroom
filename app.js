@@ -11,8 +11,16 @@ var usersRouter = require('./components/users');
 var classesRouter = require('./components/classes');
 var adminsRouter = require('./components/admins');
 const AuthMiddleWare = require("./middlewares/auth_middleware.mdw");
+const { DOMAIN_FE } = require('./config/const.config')
+const s_or_not = DOMAIN_FE[4]=='s'? 'https' : 'http';
 
 var app = express();
+
+const server = require(s_or_not).createServer(app);
+const io = require("socket.io")(server);
+require('./socket/index')(io);
+// const io_router = require('./socket/index')(io);
+// app.use(io_router);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
