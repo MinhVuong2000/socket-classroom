@@ -284,6 +284,22 @@ router.post('/addreview', async function(req, res){
     res.json(review);
 });
 
+router.post('/teachersubmitgrade', async function(req, res){
+    const id_class = req.body.id_class;
+    const id_assignment = req.body.id_assignment;
+    const id_uni = req.body.student_id;
+    const new_grade = req.body.teacher_grade;
+    const id_review = req.body.id_review;
+    
+    await user_assignment_db.updateAssigmentGrade(id_assignment, id_uni, new_grade);
+    let review = await review_db.updateStatus(id_review, 1);
+    console.log("@@@@@@@@@: ", review);
+    if (review == null){
+        return res.json([]);
+    }
+    res.json(new_grade);
+});
+
 router.post('/submitcomment', async function(req, res){
     const id_class = req.body.id_class;
     const id_review = req.body.id_review;

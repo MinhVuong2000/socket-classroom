@@ -122,7 +122,7 @@ MAXVALUE 2147483647
 START 10
 ),
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
-  "point" int4 NOT NULL,
+  "point" float4 NOT NULL,
   "id_class" int4 NOT NULL,
   "orders" int4,
   "showgrade" bool
@@ -133,7 +133,7 @@ CREATE TABLE user_assignments (
     "id_user_uni" int4 NOT NULL,
     "id_assignment" int4 NOT NULL,
     "id_class" int4 NOT NULL,
-    "grade" int4
+    "grade" float4
 );
 
 -- ----------------------------
@@ -170,8 +170,8 @@ START 10
   "id_user_uni" int4 NOT NULL,
   "id_assignment" int4 NOT NULL,
   "id_class" int4 NOT NULL,
-  "current_grade" int4,
-  "expect_grade" int4,
+  "current_grade" float4,
+  "expect_grade" float4,
   "explain" varchar(255),
   "create_time" timestamp,
 	"status" int4
