@@ -44,7 +44,8 @@ START 6
   "description" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "id_admin" int4 NOT NULL,
   "invitation_link" varchar(255) COLLATE "pg_catalog"."default",
-  "code" varchar(255) COLLATE "pg_catalog"."default"
+  "code" varchar(255) COLLATE "pg_catalog"."default",
+  "create_time" timestamp
 )
 ;
 
@@ -52,9 +53,9 @@ START 6
 -- Records of Classes
 -- ----------------------------
 BEGIN;
-INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (1, 'PTUDW', 'Môn học cơ bản về back end', 2, 'PTUDW','abcdef');
-INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (2, 'PTUDWNC', 'Học cách phát triển front end', 3,'PTUDWNC', 'ghiklm');
-INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (3, 'PTUDDD', 'Xây dựng ứng dụng cho thiết bị di động', 4, 'PTUDDD', 'nopqrs');
+INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (1, 'PTUDW', 'Môn học cơ bản về back end', 2, 'PTUDW','abcdef', '2022-01-14 13:29:22.554');
+INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (2, 'PTUDWNC', 'Học cách phát triển front end', 3,'PTUDWNC', 'ghiklm','2022-01-14 15:29:22.554');
+INSERT INTO classes OVERRIDING SYSTEM VALUE VALUES (3, 'PTUDDD', 'Xây dựng ứng dụng cho thiết bị di động', 4, 'PTUDDD', 'nopqrs', '2022-01-13 14:29:22.554');
 COMMIT;
 
 -- ----------------------------
@@ -75,6 +76,7 @@ START 5
   "address" varchar(255),
   "email" varchar(255),
   "phone" varchar(50),
+	"create_time" timestamp,
 	"otp" int4
 )
 ;
@@ -104,12 +106,14 @@ START 5
 -- Records of Users
 -- ----------------------------
 BEGIN;
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (1, 'Nguyễn Văn A', 'a_nguyenvan', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '123', NULL, NULL, NULL, -1);
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (2, 'Võ Xuân Đức Thắng', 'thang_123', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '124', NULL, NULL, NULL, -1);
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (3, 'Nguyễn Thị Minh Vượng', 'vuong_321', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '321', NULL, NULL, NULL, -1);
-INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (4, 'Lê Thị Tuyết Trinh', 'trinh_312', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '312', NULL, NULL, NULL, -1);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (1, 'Nguyễn Văn A', 'a_nguyenvan', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '123', NULL, 'email1@gmail.com', NULL,'2022-01-14 14:29:22.554', -1);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (2, 'Võ Xuân Đức Thắng', 'thang_123', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '124', NULL, 'email2@gmail.com', NULL,'2022-01-13 14:29:22.554', -1);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (3, 'Nguyễn Thị Minh Vượng', 'vuong_321', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '321', NULL, 'email3@gmail.com', NULL,'2022-01-12 14:29:22.554', -1);
+INSERT INTO users OVERRIDING SYSTEM VALUE VALUES (4, 'Lê Thị Tuyết Trinh', 'trinh_312', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '312', NULL, 'email4@gmail.com', NULL,'2022-01-15 14:29:22.554', -1);
 COMMIT;
-
+BEGIN;
+INSERT INTO admins OVERRIDING SYSTEM VALUE VALUES (1, 'Nguyễn Văn Admin', 'a_admin', '$2a$10$ij.inENEdLH4K52o/c1bKec3dXDdHybpxdVcEH6bCK8W8ygi866L.', '1', 'emailadmin@gmail.com', NULL,  -1);
+COMMIT;
 -- ----------------------------
 -- Table structure for assignments
 -- ----------------------------
