@@ -15,7 +15,12 @@ let isAuthor = async (req, res, next) => {
         try {
             const decoded = await jwtHelper.verifyToken(tokenFromClient, accessTokenSecret);
             req.jwtDecoded = {};
-            req.jwtDecoded.data = await users_db.one(decoded.data.id);
+            if(decoded.data.is_admin){
+                req.jwtDecoded.data = await admins_db.one(decoded.data.id);
+            }
+            else{
+                req.jwtDecoded.data = await users_db.one(decoded.data.id);
+            }
             req.jwtDecoded.data.is_social_login = decoded.data.is_social_login;
             next();
         } catch (error) {

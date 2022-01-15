@@ -293,7 +293,6 @@ router.post('/teachersubmitgrade', async function(req, res){
     
     await user_assignment_db.updateAssigmentGrade(id_assignment, id_uni, new_grade);
     let review = await review_db.updateStatus(id_review, 1);
-    console.log("@@@@@@@@@: ", review);
     if (review == null){
         return res.json([]);
     }
