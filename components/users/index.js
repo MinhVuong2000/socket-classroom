@@ -2,6 +2,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const user_db = require('../../models/users')
+const classes_db = require('../../models/classes')
+const assignments_db = require('../../models/assignments')
+const notis_db = require('../../models/notifications')
 
 
 router.get('/profile', async function(req, res) {
@@ -9,6 +12,12 @@ router.get('/profile', async function(req, res) {
     const profile = await user_db.one(req.jwtDecoded.data.id, true);
     return res.json(profile);
 });
+
+router.get('/notifications', async (req, res) => {
+    console.log("Get notifications");
+    const notis = await notis_db.allInUser(req.jwtDecoded.data.id_uni);
+    return res.json(notis);
+})
 
 router.post('/check-password', async function (req, res){
     user_id = req.jwtDecoded.data.id;

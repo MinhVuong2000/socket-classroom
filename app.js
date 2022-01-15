@@ -12,13 +12,24 @@ var classesRouter = require('./components/classes');
 var adminsRouter = require('./components/admins');
 const AuthMiddleWare = require("./middlewares/auth_middleware.mdw");
 const { DOMAIN_FE } = require('./config/const.config')
-const s_or_not = DOMAIN_FE[4]=='s'? 'https' : 'http';
+const https_or_not = DOMAIN_FE[4]=='s'? 'https' : 'http';
 
 var app = express();
 
-const server = require(s_or_not).createServer(app);
-const io = require("socket.io")(server);
+const server = require(https_or_not).createServer(app);
+console.log("https_or_not", https_or_not);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: DOMAIN_FE.substring(0, DOMAIN_FE.length - 1),
+    methods: ["GET", "POST", "PUT", "PATCH"],
+    allowedHeaders: ['x-access-token'],
+    credentials: true
+  }
+});
 require('./socket/index')(io);
+server.listen(process.env.PORT || 5000);
+
+console.log('process.env.PORT', process.env.PORT);
 // const io_router = require('./socket/index')(io);
 // app.use(io_router);
 
@@ -32,6 +43,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// app.use(cors({
+//   credentials: true, 
+//   origin: DOMAIN_FE.substring(0, DOMAIN_FE.length - 1)
+// }));
 app.use(cors());
 
 app.use('/', authen_author);

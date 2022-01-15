@@ -1,11 +1,13 @@
 const db = require('../utils/connectDB');
 const classess_db = require('../models/classes.js');
+const moment = require('moment');
 
 module.exports = {
     async allInUser(id_user_uni){
         const items = await db('notifications').where('id_user_uni', id_user_uni);
         for (let i = 0; i < items.length; i++){
-            items[i].class = classess_db.one(items[i].id_class, id_user_uni);
+            const _class = await classess_db.one(items[i].id_class, id_user_uni)
+            items[i].class_name = _class.class_name;
             items[i].create_time = moment(items[i].create_time).format("DD/MM/YYYY HH:mm:ss");
         }
         return items;
@@ -23,5 +25,13 @@ module.exports = {
 
     updateStatus(id, new_status){
         return db('notifications').where('id', id).update('status', new_status);
-    }
+    },
+
+    markAsRead(){
+        return db('notifications').update('status', 1);
+    },
+
+    add(new_noti){
+        return db('notifications').insert(new_noti);
+    },
 }

@@ -26,6 +26,7 @@ module.exports = {
         }
         return items[0];
     },
+    
     async oneIDUni(IDuni, is_detail=false){
         let items = await db('users').where('id_uni', IDuni);
         if (items.length==0)

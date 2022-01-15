@@ -205,6 +205,7 @@ START 10
 ),
   "id_user_uni" int4 NOT NULL,
   "id_class" int4 NOT NULL,
+  "id_assignment" int4,
   "message" varchar(255),
   "create_time" timestamp,
 	"status" int4
