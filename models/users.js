@@ -1,8 +1,12 @@
 const db = require('../utils/connectDB')
-
+const moment = require('moment');
 module.exports = {
-    all(){
-        return db('users');
+    async all(){
+        let items = await db('users');
+        for(let i = 0; i<items.length; i++){
+            items[i].create_time = moment(items[i].create_time).format("DD/MM/YYYY HH:mm:ss");
+        }
+        return items
     },
 
     async one(ID, is_detail=false){
@@ -130,6 +134,7 @@ module.exports = {
     },
     
     addNewUser(new_user){
+        new_user.create_time = new Date().toISOString();
         return db('users').insert(new_user);
     },
 
@@ -140,7 +145,9 @@ module.exports = {
     updateOTP(email, OTP){
         return db('users').where('email', email).update({'otp': OTP});
     },
-
+    updateOTPByIDUser(id_user, OTP){
+        return db('users').where('id', id_user).update({'otp': OTP});
+    },
     updatePassword(email, password){
         return db('users').where('email', email).update({'password': password});
     }

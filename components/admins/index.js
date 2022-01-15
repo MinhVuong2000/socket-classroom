@@ -13,7 +13,7 @@ router.get('/', async function(req, res){
     return res.json(profile);
 });
 
-router.use('/manage-admins', AuthMiddleWare.isSuperAdmin, manage_admins);
+router.use('/manage-admins', manage_admins);
 router.use('/manage-users', manage_users);
 router.use('/manage-classes', manage_classes);
 

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const classes_db = require('../../../models/classes');
 
-router.get('/', async function(req, res){
+router.post('/', async function(req, res){
     const all = await classes_db.allOfAll();
     return res.json(all);
 });

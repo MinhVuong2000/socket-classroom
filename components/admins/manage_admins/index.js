@@ -2,9 +2,17 @@ const express = require('express');
 const router = express.Router();
 const admins_db = require('../../../models/admins');
 
-router.get('/', async function(req, res){
+router.post('/', async function(req, res){
     const all = await admins_db.all();
-    return res.json(all);
+    let is_super = false;
+    console.log("Admin: ", all);
+    if(req.jwtDecoded.data.is_super == 1){
+        is_super = true;
+    }
+    return res.json({
+        list_admin: all,
+        is_super: is_super,
+    });
 });
 
 router.post('/add', async function(req, res){

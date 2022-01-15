@@ -2,12 +2,16 @@ const db = require('../utils/connectDB')
 const user_db = require('./users')
 const class_user_db = require('./class_user')
 const class_user = require('./class_user')
-
+const moment = require('moment');
 module.exports = {
-    allOfAll(){
-        return db('classes');
+    async allOfAll(){
+        let items = await db('classes');
+        for(let i = 0; i<items.length; i++){
+            items[i].create_time = moment(items[i].create_time).format("DD/MM/YYYY HH:mm:ss");
+        }
+        return items
     },
-
+    
     async all(iduser){
         let listclass_user = await db('class_user').where('id_uni_user', iduser);
         if(listclass_user.length == 0){
@@ -86,6 +90,7 @@ module.exports = {
     },
 
     async add(new_classroom, iduni, fullname){
+        new_classroom.create_time = new Date().toISOString();
         await db('classes').insert(new_classroom);
         let items = await db('classes').where({
             class_name: new_classroom.class_name
