@@ -1,3 +1,4 @@
+const { DOMAIN_FE } = require('../../config/const.config')
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
@@ -7,8 +8,7 @@ const class_user_db = require('../../models/class_user');
 const assignments_db = require('../../models/assignments');
 const user_assignment_db = require('../../models/user_assignments');
 const detail_class = require('./detail_class')
-const BASEURL = 'http://localhost:3001/classes/inviteclass/'
-// const BASEURL = 'https://classroom-grade-manager-fe.herokuapp.com/classes/inviteclass/'
+const BASEURL = DOMAIN_FE + 'classes/inviteclass/'
 
 function randomString(n) {
     var text = "";
