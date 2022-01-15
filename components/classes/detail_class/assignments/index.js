@@ -211,6 +211,14 @@ router.post('/getlistcomment', async function(req, res){
     let listComment = await comment_db.commentsByReviewID(review.review.id);
     res.json(listComment);
 });
+router.post('/teacherlistcomment', async function(req, res){
+    const id_review = req.body.id_review;
+    let listComment = await comment_db.commentsByReviewID(id_review);
+    if(listComment.length>0){
+        return res.json(listComment);
+    }
+    res.json([]);
+});
 router.post('/getdetailreview', async function(req, res){
     const id_class = req.body.id_class;
     const id_assignment = req.body.id_assignment;
@@ -222,11 +230,31 @@ router.post('/getdetailreview', async function(req, res){
     res.json(review);
 });
 
+router.post('/teachernews', async function(req, res){
+    const id_class = req.body.id_class;
+    const id_assignment = req.body.id_assignment;
+    const id_uni = req.jwtDecoded.data.id_uni;
+    let review = await review_db.findReviewByIDClass(id_class);
+    if (review == null){
+        return res.json([]);
+    }
+    res.json(review);
+});
+
 router.post('/getgradeafter', async function(req, res){
     const id_class = req.body.id_class;
     const id_assignment = req.body.id_assignment;
     const id_uni = req.jwtDecoded.data.id_uni;
     let grade = await review_db.findReviewGradeByUserAssignment(id_uni, id_assignment);
+    if (grade == null){
+        return res.json(null);
+    }
+    res.json(grade);
+});
+
+router.post('/teachergradeafter', async function(req, res){
+    const id_review = req.body.id_review;
+    let grade = await review_db.findGradeAfterTeacherByIdReview(id_review);
     if (grade == null){
         return res.json(null);
     }

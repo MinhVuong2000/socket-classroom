@@ -3,7 +3,7 @@ const users_db = require('../models/users.js');
 const classess_db = require('../models/classes.js');
 const assignments_db = require('../models/assignments.js');
 const user_assignments_db = require('./user_assignments');
-
+const moment = require('moment');
 module.exports = {
     all(){
         return db('review_grade');
@@ -53,6 +53,40 @@ module.exports = {
         console.log(item.student);
         return item;
     },
+    async findReviewByIDClass(id_class){
+        const items = await db('review_grade').where({
+            id_class: id_class
+        });
+        if (items.length===0)
+            return null;
+        let list_news = [];
+        for(i = 0; i<items.length; i++){
+            let temp = {};
+            temp.id_review = items[i].id;
+            temp.student_id = items[i].id_user_uni;
+            temp.id_assignment = items[i].id_assignment;
+            temp.current_grade = items[i].current_grade;
+            temp.expect_grade = items[i].expect_grade;
+            temp.explain = items[i].explain;
+            temp.status = items[i].status;
+            temp.time = moment(items[i].create_time).format("DD/MM/YYYY HH:mm:ss");
+            let nameassign = await db('assignments').where({
+                id: items[i].id_assignment
+            })
+            if(nameassign.length > 0){
+                temp.name_assignment = nameassign[0].name;
+            }
+            let studentname = await db('users').where({
+                id_uni: items[i].id_user_uni
+            })
+            if(studentname.length > 0){
+                temp.student_name = studentname[0].full_name;
+            }
+            list_news.push(temp);
+        }
+        console.log("Database list news teacher: ",list_news);
+        return list_news;
+    },
     async findReviewGradeByUserAssignment(id_uni, id_assignment){
         const items = await db('review_grade').where({
             id_user_uni: id_uni,
@@ -65,6 +99,22 @@ module.exports = {
             return null;
         }
         let grade = await user_assignments_db.find1ScoreByIDAssignmentUser(id_assignment, id_uni);
+        if(grade == null){
+            return null;
+        }
+        return grade.grade;
+    },
+    async findGradeAfterTeacherByIdReview(id_review){
+        const items = await db('review_grade').where({
+            id: id_review
+        });
+        if (items.length===0)
+            return null;
+        let item = items[0];
+        if(item.status == -1){
+            return null;
+        }
+        let grade = await user_assignments_db.find1ScoreByIDAssignmentUser(item.id_assignment, item.id_user_uni);
         if(grade == null){
             return null;
         }
