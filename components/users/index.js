@@ -19,6 +19,19 @@ router.get('/notifications', async (req, res) => {
     return res.json(notis);
 })
 
+router.patch('/notifications-mark-all-as-read', async (req, res) => {
+    console.log("Patch notifications-mark-all-as-read");
+    await notis_db.markAsRead();
+    return res.json(true);
+});
+
+router.patch('/notifications-mark-one-as-read', async (req, res) => {
+    const id_noti = req.body.id;
+    console.log("Patch notifications-mark-all-as-read", id_noti);
+    await notis_db.updateStatus(id_noti, 1);
+    return res.json(true);
+});
+
 router.post('/check-password', async function (req, res){
     user_id = req.jwtDecoded.data.id;
     const user = await user_db.one(user_id, true);
