@@ -1,6 +1,6 @@
 const db = require('../utils/connectDB');
 const users_db = require('../models/users.js');
-const classess_db = require('../models/classes.js');
+const classes_db = require('../models/classes.js');
 const assignments_db = require('../models/assignments.js');
 const user_assignments_db = require('./user_assignments');
 const moment = require('moment');
@@ -14,9 +14,9 @@ module.exports = {
         if (items.length===0)
             return null;
         let item = items[0];
-        item.student = users_db.oneIDUni(item.id_user_uni, false);
-        item.assignment = assignments_db.one(item.id_assignment);
-        item.class = classess_db.one(item.id_class, item.id_user_uni);
+        item.student = await users_db.oneIDUni(item.id_user_uni, false);
+        item.assignment = await assignments_db.one(item.id_assignment);
+        item.class = await classes_db.one(item.id_class, item.id_user_uni);
         console.log(item);
         return item;
     },
@@ -47,9 +47,9 @@ module.exports = {
             return null;
         let item = {};
         item.review = items[0];
-        item.student = users_db.oneIDUni(items[0].id_user_uni, false);
-        item.assignment = assignments_db.one(items[0].id_assignment);
-        item.class = classess_db.one(items[0].id_class, items[0].id_user_uni);
+        item.student = await users_db.oneIDUni(items[0].id_user_uni, false);
+        item.assignment = await assignments_db.one(items[0].id_assignment);
+        item.class = await classes_db.one(items[0].id_class, items[0].id_user_uni);
         console.log(item.student);
         return item;
     },

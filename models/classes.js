@@ -30,12 +30,12 @@ module.exports = {
     },
 
     async one(idclass, id_uni){
-
+        console.log('Class user item: idclass, id_uni', idclass, id_uni);
         let class_user_item = await db('class_user').where({
             'id_uni_user': id_uni,
             'id_class': idclass
         });
-        //console.log("Class user item",class_user_item);
+        console.log("Class user item",class_user_item);
         if (class_user_item.length==0){
             return {message: 'not enroll class'};
         }
@@ -50,7 +50,7 @@ module.exports = {
         item.list_teacher = await class_user_db.roleByClass(idclass,true);
         item.list_student = await class_user_db.roleByClass(idclass,false);
         item.isTeacher = class_user_item[0].is_teacher;
-        console.log("data get derail 1 class infor on classes db",item);
+        // console.log("data get detail 1 class infor on classes db",item);
         return item;
     },
 

@@ -2,6 +2,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const user_db = require('../../models/users')
+const classes_db = require('../../models/classes')
+const assignments_db = require('../../models/assignments')
+const notis_db = require('../../models/notifications')
 
 
 router.get('/profile', async function(req, res) {
@@ -10,6 +13,25 @@ router.get('/profile', async function(req, res) {
     const profile = await req.jwtDecoded.data;
     
     return res.json(profile);
+});
+
+router.get('/notifications', async (req, res) => {
+    console.log("Get notifications");
+    const notis = await notis_db.allInUser(req.jwtDecoded.data.id_uni);
+    return res.json(notis);
+})
+
+router.patch('/notifications-mark-all-as-read', async (req, res) => {
+    console.log("Patch notifications-mark-all-as-read");
+    await notis_db.markAsRead();
+    return res.json(true);
+});
+
+router.patch('/notifications-mark-one-as-read', async (req, res) => {
+    const id_noti = req.body.id;
+    console.log("Patch notifications-mark-all-as-read", id_noti);
+    await notis_db.updateStatus(id_noti, 1);
+    return res.json(true);
 });
 
 router.post('/check-password', async function (req, res){
