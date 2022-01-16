@@ -22,7 +22,13 @@ function randomString(n) {
 /* GET home page. */
 router.get('/', async function(req, res, next) {
     console.log(req.jwtDecoded.data);
+    if(req.jwtDecoded.data.id_uni === undefined){
+        console.log("Khong co id_uni");
+        return res.json(null)
+    }
     if (req.jwtDecoded.data.id_uni === '')
+        return res.json(null);
+    if (req.jwtDecoded.data.id_uni === null)
         return res.json(null);
     const allData = await classed_db.all(req.jwtDecoded.data.id_uni);
     res.json(allData);

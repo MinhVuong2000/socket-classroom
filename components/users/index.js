@@ -6,7 +6,9 @@ const user_db = require('../../models/users')
 
 router.get('/profile', async function(req, res) {
     console.log(req.jwtDecoded.data);
-    const profile = await user_db.one(req.jwtDecoded.data.id, true);
+    //const profile = await user_db.one(req.jwtDecoded.data.id, true);
+    const profile = await req.jwtDecoded.data;
+    
     return res.json(profile);
 });
 
@@ -25,6 +27,19 @@ router.patch('/update-profile', async function(req, res) {
     console.log("Update profile:", updated_profile);
     id_user = req.jwtDecoded.data.id;
     await user_db.updateProfile(id_user, updated_profile);
+    return res.status(200).json(true);
+});
+router.patch('/admin-update-profile', async function(req, res) {
+    let newstuid = req.body.id_uni;let id_user = req.body.id;
+    console.log("Update admin profile:", newstuid, "   ", id_user);
+    await user_db.adminUpdateProfile(id_user, newstuid);
+    return res.status(200).json(true);
+});
+
+router.patch('/unmapstudentid', async function(req, res) {
+    let id_user = req.body.id;
+    console.log("Unmap admin profile:",  id_user);
+    await user_db.updateStudentID(id_user, null);
     return res.status(200).json(true);
 });
 

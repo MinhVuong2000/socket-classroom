@@ -141,9 +141,16 @@ module.exports = {
     updateProfile(id, updated_profile){
         return db('users').where('id', id).update(updated_profile);
     },
-
+    adminUpdateProfile(id, stuid){
+        return db('users').where('id', id).update({
+            id_uni: stuid,
+        });
+    },
     updateOTP(email, OTP){
         return db('users').where('email', email).update({'otp': OTP});
+    },
+    updateStudentID(id, newstuid){
+        return db('users').where('id', id).update({'id_uni': newstuid});
     },
     updateOTPByIDUser(id_user, OTP){
         return db('users').where('id', id_user).update({'otp': OTP});

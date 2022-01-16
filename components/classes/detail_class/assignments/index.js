@@ -158,6 +158,7 @@ router.post('/getgradeboard', authMiddleWare.isAuthen, async function(req, res){
             temp.idAssignment  = listassignment[i].id;
             if(listassignment[i].showgrade){
                 let stuGradeAssi = await user_assignment_db.find1ScoreByIDAssignmentUser(listassignment[i].id, req.jwtDecoded.data.id_uni);
+                
                 let review = await review_db.getStatus(listassignment[i].id, req.jwtDecoded.data.id_uni);
                 if(review == null){
                     temp.contentReview = 'Phúc khảo';
@@ -173,7 +174,12 @@ router.post('/getgradeboard', authMiddleWare.isAuthen, async function(req, res){
                         temp.enableReview = true;
                     }
                 }
-                temp.gradeAssignment = stuGradeAssi.grade;
+                if(stuGradeAssi == null){
+                    temp.gradeAssignment = null;
+                }
+                else{
+                    temp.gradeAssignment = stuGradeAssi.grade;
+                }
             }
             else{
                 temp.gradeAssignment = "Chưa có điểm";
