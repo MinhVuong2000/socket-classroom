@@ -23,6 +23,19 @@ module.exports = {
         return item;
     },
 
+    async oneByUniIDandCreateTime(id_user_uni, create_time){
+        const items = await db('notifications').where({
+            id_user_uni: id_user_uni,
+            create_time: create_time,
+        });
+        if (items.length===0) 
+            return null;
+        let item = items[0];
+        item.class = classess_db.one(item.id_class, item.id_user_uni);
+        item.create_time = moment(item.create_time).format("DD/MM/YYYY HH:mm:ss");
+        return item;
+    },
+
     updateStatus(id, new_status){
         return db('notifications').where('id', id).update('status', new_status);
     },

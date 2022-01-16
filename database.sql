@@ -134,7 +134,7 @@ START 10
 ;
 
 CREATE TABLE user_assignments (
-    "id_user_uni" int4 NOT NULL,
+    "id_user_uni" varchar(50) NOT NULL,
     "id_assignment" int4 NOT NULL,
     "id_class" int4 NOT NULL,
     "grade" float4
@@ -171,7 +171,7 @@ MINVALUE  1
 MAXVALUE 2147483647
 START 10
 ),
-  "id_user_uni" int4 NOT NULL,
+  "id_user_uni" varchar(50) NOT NULL,
   "id_assignment" int4 NOT NULL,
   "id_class" int4 NOT NULL,
   "current_grade" float4,
@@ -189,7 +189,7 @@ MINVALUE  1
 MAXVALUE 2147483647
 START 10
 ),
-  "id_user_uni" int4 NOT NULL,
+  "id_user_uni" varchar(50) NOT NULL,
   "id_review" int4 NOT NULL,
   "content" varchar(255),
   "create_time" timestamp
@@ -203,7 +203,7 @@ MINVALUE  1
 MAXVALUE 2147483647
 START 10
 ),
-  "id_user_uni" int4 NOT NULL,
+  "id_user_uni" varchar(50) NOT NULL,
   "id_class" int4 NOT NULL,
   "id_assignment" int4,
   "message" varchar(255),
