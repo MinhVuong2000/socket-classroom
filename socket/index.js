@@ -213,32 +213,32 @@ module.exports = function(io) {
                 status: 0
             }
             console.log('new notifications not have id_user_uni', new_noti);
-
-            if (review.class.isTeacher){
+            console.log('teacher of class', review.class.list_teacher);
+            if (review.class.list_teacher.some(
+                teacher => teacher.id_uni===decoded_user.id_uni
+            )){
                 const id_student = review.id_user_uni;
                 console.log('Id_uni students get noti from public mark', id_student)
-                for (let i = 0; i < receivers.length; i++){
-                    new_noti.id_user_uni = id_student;
-                    console.log('new notifications had id_user_uni', new_noti);
-                    await notis_db.add(new_noti);
-                    new_noti_class = await notis_db.oneByUniIDandCreateTime(
-                        new_noti.id_user_uni, 
-                        new_noti.create_time
-                    );
-                    receiver = getUser(new_noti_class.id_user_uni);
-                    console.log('student ', i, ":", receiver)
-                    if (receiver){
-                        io.to(receiver.socketId).emit("getNotifications", {
-                            id: new_noti_class.id,
-                            id_user_uni: new_noti_class.id_user_uni,
-                            id_class: new_noti_class.id_class,
-                            id_assignment: new_noti_class.id_assignment,
-                            message: new_noti_class.message,
-                            create_time: new_noti_class.create_time,
-                            status: 0,
-                            class_name: review.class.class_name,
-                        });
-                    }
+                new_noti.id_user_uni = id_student;
+                console.log('new notifications had id_user_uni', new_noti);
+                await notis_db.add(new_noti);
+                new_noti_class = await notis_db.oneByUniIDandCreateTime(
+                    new_noti.id_user_uni, 
+                    new_noti.create_time
+                );
+                receiver = getUser(new_noti_class.id_user_uni);
+                console.log('student ', i, ":", receiver)
+                if (receiver){
+                    io.to(receiver.socketId).emit("getNotifications", {
+                        id: new_noti_class.id,
+                        id_user_uni: new_noti_class.id_user_uni,
+                        id_class: new_noti_class.id_class,
+                        id_assignment: new_noti_class.id_assignment,
+                        message: new_noti_class.message,
+                        create_time: new_noti_class.create_time,
+                        status: 0,
+                        class_name: review.class.class_name,
+                    });
                 }
             }
             else{
