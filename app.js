@@ -27,33 +27,36 @@ const io = require("socket.io")(server, {
   }
 });
 require('./socket/index')(io);
-server.listen(5000);
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log('SOCKET is listening on port ', PORT);
+});
 
-console.log('process.env.PORT', process.env.PORT);
-// const io_router = require('./socket/index')(io);
-// app.use(io_router);
+// console.log('process.env.PORT', process.env.PORT);
+// // const io_router = require('./socket/index')(io);
+// // app.use(io_router);
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+// // view engine setup
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'hbs');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(logger('dev'));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
+// app.use(cookieParser());
+// app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use(cors({
-//   credentials: true, 
-//   origin: DOMAIN_FE.substring(0, DOMAIN_FE.length - 1)
-// }));
-app.use(cors());
+// // app.use(cors({
+// //   credentials: true, 
+// //   origin: DOMAIN_FE.substring(0, DOMAIN_FE.length - 1)
+// // }));
+// app.use(cors());
 
-app.use('/', authen_author);
-app.use(AuthMiddleWare.isAuthor);
-app.use('/users', usersRouter);
-app.use('/classes', classesRouter);
-app.use('/admins', AuthMiddleWare.isAdmin, adminsRouter);
+// app.use('/', authen_author);
+// app.use(AuthMiddleWare.isAuthor);
+// app.use('/users', usersRouter);
+// app.use('/classes', classesRouter);
+// app.use('/admins', AuthMiddleWare.isAdmin, adminsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
