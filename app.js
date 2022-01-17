@@ -27,7 +27,7 @@ const io = require("socket.io")(server, {
   }
 });
 require('./socket/index')(io);
-server.listen(process.env.PORT || 5000);
+server.listen(5000);
 
 console.log('process.env.PORT', process.env.PORT);
 // const io_router = require('./socket/index')(io);
