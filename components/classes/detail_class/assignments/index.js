@@ -7,6 +7,7 @@ const user_assignment_db = require('../../../../models/user_assignments');
 const class_user_db = require('../../../../models/class_user');
 const review_db = require('../../../../models/review_grade');
 const comment_db = require('../../../../models/comments');
+const moment = require('moment')
 //url: /detail/:id/assigments
 
 router.get('/', async function(req, res) {
@@ -278,7 +279,7 @@ router.post('/addreview', async function(req, res){
         current_grade: req.body.current,
         expect_grade: req.body.expect,
         explain: req.body.explain,
-        create_time: new Date().toISOString(),
+        create_time: moment().add(7, 'hours'),
         status: -1
     }
     await review_db.add(addReview);
@@ -313,7 +314,7 @@ router.post('/submitcomment', async function(req, res){
         id_user_uni: id_uni,
         id_review: id_review,
         content: req.body.contentComment,
-        create_time: new Date().toISOString()
+        create_time: moment().add(7, 'hours')
     }
     await comment_db.add(addComment);
     let commentList = await comment_db.commentsByReviewID(id_review);

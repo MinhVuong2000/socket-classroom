@@ -5,7 +5,7 @@ const class_user_db = require('../../../models/class_user')
 const bcrypt = require('bcryptjs');
 const jwtHelper = require("../../../utils/jwt.helper");
 const nodemailer = require('nodemailer');
-
+const moment = require('moment')
 const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
@@ -41,13 +41,14 @@ exports.registeradmin = async function(req, res) {
         password: hash,
         full_name: req.body.fullname,
         email: req.body.email,
-        create_time: new Date().toISOString(),
+        create_time: moment().add(7, 'hours'),
         otp: -1
     }
 
     let flag = await admin_db.add(user);
     if (flag){
-        return res.json(true);
+        const list_admin = await admin_db.all();
+        return res.json(list_admin);
     }
     return res.json(false);
 }

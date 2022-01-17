@@ -135,7 +135,7 @@ module.exports = {
     },
     
     addNewUser(new_user){
-        new_user.create_time = new Date().toISOString();
+        new_user.create_time = moment().add(7, 'hours');
         return db('users').insert(new_user);
     },
 

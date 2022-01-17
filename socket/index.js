@@ -70,7 +70,7 @@ module.exports = function(io) {
                 id_class: id_class,
                 id_assignment: id_assignment,
                 message: message,
-                create_time: moment(),
+                create_time: moment().add(7, 'hours'),
                 status: 0
             }
             console.log('new notifications not have id_user_uni', new_noti);
@@ -119,7 +119,7 @@ module.exports = function(io) {
                 id_class: id_class,
                 id_assignment: id_assignment,
                 message: message,
-                create_time: moment(),
+                create_time: moment().add(7, 'hours'),
                 status: 0
             }
             console.log('new notifications not have id_user_uni', new_noti);
@@ -168,7 +168,7 @@ module.exports = function(io) {
                 id_class: id_class,
                 id_assignment: id_assignment,
                 message: message,
-                create_time: moment(),
+                create_time: moment().add(7, 'hours'),
                 status: 0
             }
             console.log('new notifications', new_noti);
@@ -209,7 +209,7 @@ module.exports = function(io) {
                 id_class: review.id_class,
                 id_assignment: review.id_assignment,
                 message: message,
-                create_time: moment(),
+                create_time: moment().add(7, 'hours'),
                 status: 0
             }
             console.log('new notifications not have id_user_uni', new_noti);

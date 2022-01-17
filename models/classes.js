@@ -90,7 +90,7 @@ module.exports = {
     },
 
     async add(new_classroom, iduni, fullname){
-        new_classroom.create_time = new Date().toISOString();
+        new_classroom.create_time = moment().add(7, 'hours');
         await db('classes').insert(new_classroom);
         let items = await db('classes').where({
             class_name: new_classroom.class_name
