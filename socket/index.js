@@ -178,7 +178,7 @@ module.exports = function(io) {
                 new_noti.create_time
             );
             receiver = getUser(new_noti_class.id_user_uni);
-            console.log('teacher ', i, ":", receiver)
+//             console.log('teacher ', i, ":", receiver)
             if (receiver){
                 io.to(receiver.socketId).emit("getNotifications", {
                     id: new_noti_class.id,
