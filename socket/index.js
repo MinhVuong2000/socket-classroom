@@ -18,8 +18,8 @@ module.exports = function(io) {
         onlineUsers.push({ id_uni, socketId });
     };
 
-    const removeUser = (socketId) => {
-        onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
+    const removeUser = (id_uni) => {
+        onlineUsers = onlineUsers.filter((user) => user.id_uni !== id_uni);
     };
 
     const getUser = (id_uni) => {
